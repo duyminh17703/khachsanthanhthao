@@ -15,7 +15,8 @@ export const CartProvider = ({ children }) => {
     // 1. Load giỏ hàng
     const fetchCart = async () => {
         try {
-            const res = await axios.get(`http://localhost:3000/api/v1/cart/${userId}`);
+            const API_URL = import.meta.env.VITE_API_URL;
+            const res = await axios.get(`${API_URL}/api/v1/cart/${userId}`);
             if (res.data.success) setCart(res.data.cart);
         } catch (error) {
             console.error("Lỗi tải giỏ hàng", error);
@@ -29,7 +30,8 @@ export const CartProvider = ({ children }) => {
     // 2. Hàm thêm vào giỏ
     const addToCart = async (payload) => {
         try {
-            const res = await axios.post('http://localhost:3000/api/v1/cart/add-to-cart', {
+            const API_URL = import.meta.env.VITE_API_URL;
+            const res = await axios.post(`${API_URL}/api/v1/cart/add-to-cart`, {
                 userId, 
                 ...payload 
             });
@@ -47,7 +49,8 @@ export const CartProvider = ({ children }) => {
     // 3. Hàm xóa item
     const removeFromCart = async (itemId) => {
         try {
-            const res = await axios.post('http://localhost:3000/api/v1/cart/remove-to-cart', { 
+            const API_URL = import.meta.env.VITE_API_URL;
+            const res = await axios.post(`${API_URL}/api/v1/cart/remove-to-cart`, { 
                 userId, 
                 itemId 
             });
@@ -69,7 +72,8 @@ export const CartProvider = ({ children }) => {
             setIsCartOpen(false); // Đóng sidebar nếu đang mở
 
             // 2. Gọi API để xóa trong Database
-            await axios.delete(`http://localhost:3000/api/v1/cart/clear/${userId}`);
+            const API_URL = import.meta.env.VITE_API_URL;
+            await axios.delete(`${API_URL}/api/v1/cart/clear/${userId}`);
             
         } catch (error) {
             console.error("Lỗi khi clear giỏ hàng database:", error);
