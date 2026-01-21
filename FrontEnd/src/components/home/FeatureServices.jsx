@@ -11,7 +11,8 @@ const FeatureServices = () => {
     const fetchExperiences = async () => {
       try {
         // Gọi API với tham số type=EXPERIENCE
-        const response = await axios.get(`http://localhost:3000/api/v1/full-service/feature-by-type?type=EXPERIENCE`);
+        const API_URL = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${API_URL}/api/v1/full-service/feature-by-type?type=EXPERIENCE`);
         
         if (response.data.success) {
           setServices(response.data.data);

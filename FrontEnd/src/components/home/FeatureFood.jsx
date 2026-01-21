@@ -11,7 +11,8 @@ const FeatureFood = () => {
     const fetchDining = async () => {
       try {
         // Gọi API lấy dịch vụ loại DINING
-        const response = await axios.get(`http://localhost:3000/api/v1/full-service/feature-by-type?type=DINING`);
+        const API_URL = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${API_URL}/api/v1/full-service/feature-by-type?type=DINING`);
         
         if (response.data.success) {
           setFoodList(response.data.data);

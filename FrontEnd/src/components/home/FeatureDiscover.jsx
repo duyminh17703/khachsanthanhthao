@@ -11,7 +11,8 @@ const FeaturedDiscover = () => {
     const fetchDiscoveries = async () => {
       try {
         // Gọi API với tham số type=DISCOVER
-        const response = await axios.get(`http://localhost:3000/api/v1/full-service/feature-by-type?type=DISCOVER`);
+        const API_URL = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${API_URL}/api/v1/full-service/feature-by-type?type=DISCOVER`);
         if (response.data.success) {
           setDiscovers(response.data.data);
         }

@@ -16,7 +16,8 @@ const FeatureRooms = () => {
     const fetchFeaturedRooms = async () => {
       try {
         // 1. Đổi API thành endpoint /feature-room vừa tạo
-        const res = await axios.get('http://localhost:3000/api/v1/rooms/feature-room');
+        const API_URL = import.meta.env.VITE_API_URL;
+        const res = await axios.get(`${API_URL}/api/v1/rooms/feature-room`);
         
         if (res.data.success) {
           // 2. Map dữ liệu đúng theo yêu cầu của RoomCard
