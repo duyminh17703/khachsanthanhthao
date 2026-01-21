@@ -17,7 +17,8 @@ const CheckoutSuccess = () => {
       try {
         if (!bookingCode) return;
         // Gọi API search mà bạn đã có trong InvoiceRoutes
-        const res = await axios.get(`http://localhost:3000/api/v1/invoices/search/${bookingCode}`);
+        const API_URL = import.meta.env.VITE_API_URL;
+        const res = await axios.get(`${API_URL}/api/v1/invoices/search/${bookingCode}`);
         if (res.data.success) {
           setBooking(res.data.data);
         }

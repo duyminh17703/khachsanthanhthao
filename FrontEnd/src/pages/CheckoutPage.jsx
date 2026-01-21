@@ -174,7 +174,8 @@ const CheckoutPage = () => {
                 final_total: newItemsTotal
             };
             
-            const res = await axios.post('http://localhost:3000/api/v1/invoices/create', bookingPayload);
+            const API_URL = import.meta.env.VITE_API_URL;
+            const res = await axios.post(`${API_URL}/api/v1/invoices/create`, bookingPayload);
 
             // [LOGIC VNPAY]
             if (res.data.isRedirect && res.data.paymentUrl) {
@@ -214,8 +215,9 @@ const CheckoutPage = () => {
                     allocated_room_title: item.roomTitle
                 }));
 
+                const API_URL = import.meta.env.VITE_API_URL;
                 promises.push(
-                    axios.post('http://localhost:3000/api/v1/invoices/add-services', {
+                    axios.post(`${API_URL}/api/v1/invoices/add-services`, {
                         booking_code: code,
                         new_services: newServices,
                         additional_total: subTotal

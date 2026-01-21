@@ -21,7 +21,8 @@ const InvoiceManager = () => { // Đổi tên component cho khớp file (Booking
         const token = localStorage.getItem('admin_token');
         const query = `?status=${filterStatus}&search=${searchTerm}`;
 
-        const response = await axios.get(`http://localhost:3000/api/v1/invoices/admin/all${query}`, {
+        const API_URL = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${API_URL}/api/v1/invoices/admin/all${query}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
 

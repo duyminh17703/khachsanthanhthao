@@ -268,7 +268,8 @@ const Navbar = () => {
 
     try {
       // 2. Gọi API tìm phòng thông minh
-      const res = await axios.post("http://localhost:3000/api/v1/rooms/find-available", {
+      const API_URL = import.meta.env.VITE_API_URL;
+      const res = await axios.post(`${API_URL}/api/v1/rooms/find-available`, {
         checkIn: checkInDate,
         checkOut: checkOutDate,
         adults: adults,

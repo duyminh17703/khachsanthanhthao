@@ -11,7 +11,7 @@ const RoomList = ({ rooms }) => {
   }
 
   return (
-    <div className="max-w-[1152px] mx-auto px-4 lg:px-0 pb-20">
+    <div className="max-w-6xl mx-auto px-4 lg:px-0 pb-20">
       <div className="flex flex-col gap-10">
         {rooms.map((room) => (
           <RoomListItem key={room._id} room={room} />

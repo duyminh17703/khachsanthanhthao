@@ -44,7 +44,8 @@ const ServiceManager = ({ pageType }) => {
     try {
       const token = localStorage.getItem('admin_token');
       // Gọi API lấy list (đã có logic lọc Type ở backend)
-      const response = await axios.get('http://localhost:3000/api/v1/full-service/admin/list', {
+      const API_URL = import.meta.env.VITE_API_URL;
+      const response = await axios.get(`${API_URL}/api/v1/full-service/admin/list`, {
         headers: { Authorization: `Bearer ${token}` },
         params: {
           type: pageType, 
@@ -76,7 +77,8 @@ const ServiceManager = ({ pageType }) => {
     if (!window.confirm("Bạn có chắc muốn xóa dịch vụ này không?")) return;
     try {
         const token = localStorage.getItem('admin_token');
-        await axios.delete('http://localhost:3000/api/v1/full-service/delete-service', {
+        const API_URL = import.meta.env.VITE_API_URL;
+        await axios.delete(`${API_URL}/api/v1/full-service/delete-service`, {
             headers: { Authorization: `Bearer ${token}` },
             data: { id }
         });

@@ -19,7 +19,8 @@ const RoomManager = () => {
     setLoading(true);
     try {
       // Gọi API với query params
-      const response = await axios.get('http://localhost:3000/api/v1/rooms/list-rooms', {
+      const API_URL = import.meta.env.VITE_API_URL;
+      const response = await axios.get(`${API_URL}/api/v1/rooms/list-rooms`, {
         params: {
           type: filterType,
           search: searchTerm
@@ -49,7 +50,8 @@ const RoomManager = () => {
 
     try {
       const token = localStorage.getItem('admin_token');
-      await axios.delete('http://localhost:3000/api/v1/rooms/delete-room', {
+      const API_URL = import.meta.env.VITE_API_URL;
+      await axios.delete(`${API_URL}/api/v1/rooms/delete-room`, {
         headers: { Authorization: `Bearer ${token}` },
         data: { id }
       });
@@ -137,7 +139,7 @@ const RoomManager = () => {
                                 <td className="p-4">
                                     <h4 className="text-sm font-bold text-neutral-900 line-clamp-1">{room.title}</h4>
                                     <div className="flex gap-2 mt-1">
-                                        <span className={`px-1.5 py-0.5 rounded-[4px] text-[9px] font-bold uppercase border ${
+                                        <span className={`px-1.5 py-0.5 rounded-sm text-[9px] font-bold uppercase border ${
                                             room.typeRoom === 'LUXURY' 
                                             ? 'bg-purple-50 text-purple-700 border-purple-100' 
                                             : 'bg-blue-50 text-blue-700 border-blue-100'

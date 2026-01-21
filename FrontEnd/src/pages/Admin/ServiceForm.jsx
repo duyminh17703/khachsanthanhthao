@@ -63,7 +63,8 @@ useEffect(() => {
           const token = localStorage.getItem('admin_token');
 
           // 2. Gửi request kèm Header Authorization
-          const res = await axios.get(`http://localhost:3000/api/v1/full-service/admin/detail/${id}`, {
+          const API_URL = import.meta.env.VITE_API_URL;
+          const res = await axios.get(`${API_URL}/api/v1/full-service/admin/detail/${id}`, {
             headers: {
               Authorization: `Bearer ${token}` // QUAN TRỌNG: Phải có dòng này
             }
@@ -103,7 +104,8 @@ useEffect(() => {
     const data = new FormData();
     data.append('image', file);
     try {
-        const res = await axios.post('http://localhost:3000/api/v1/upload', data, {
+        const API_URL = import.meta.env.VITE_API_URL;
+        const res = await axios.post(`${API_URL}/api/v1/upload`, data, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
         if (res.data.success) {
@@ -182,7 +184,8 @@ useEffect(() => {
     setLoading(true);
     const token = localStorage.getItem('admin_token');
     try {
-        const url = isEditMode ? 'http://localhost:3000/api/v1/full-service/update-service' : 'http://localhost:3000/api/v1/full-service/add-service';
+        const API_URL = import.meta.env.VITE_API_URL;
+        const url = isEditMode ? `${API_URL}/api/v1/full-service/update-service` : `${API_URL}/api/v1/full-service/add-service`;
         const method = isEditMode ? 'put' : 'post';
         const payload = isEditMode ? { ...formData, id } : formData;
 

@@ -13,7 +13,7 @@ export const showSuccess = (message) => {
     >
       <div className="flex-1 w-0 p-4">
         <div className="flex items-start">
-          <div className="flex-shrink-0 pt-0.5">
+          <div className="shrink-0 pt-0.5">
             <CheckCircle size={24} weight="fill" className="text-green-500" />
           </div>
           <div className="ml-3 flex-1">
@@ -38,7 +38,7 @@ export const showError = (message) => {
     >
       <div className="flex-1 w-0 p-4">
         <div className="flex items-start">
-          <div className="flex-shrink-0 pt-0.5">
+          <div className="shrink-0 pt-0.5">
             <XCircle size={24} weight="fill" className="text-red-500" />
           </div>
           <div className="ml-3 flex-1">

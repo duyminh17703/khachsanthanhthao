@@ -13,7 +13,8 @@ const OfferManager = () => {
 
     const fetchOffers = async () => {
         try {
-            const res = await axios.get('http://localhost:3000/api/v1/offers/list');
+            const API_URL = import.meta.env.VITE_API_URL;
+            const res = await axios.get(`${API_URL}/api/v1/offers/list`);
             if (res.data.success) {
                 setOffers(res.data.data);
             }
@@ -38,9 +39,9 @@ const OfferManager = () => {
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-
+            const API_URL = import.meta.env.VITE_API_URL;
             // Gửi request kèm config
-            await axios.delete(`http://localhost:3000/api/v1/offers/delete/${id}`, config); 
+            await axios.delete(`${API_URL}/api/v1/offers/delete/${id}`, config); 
             
             showSuccess("Đã xóa ưu đãi thành công!");
             setOffers(offers.filter(offer => offer._id !== id));

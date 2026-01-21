@@ -19,7 +19,8 @@ const AdminLogin = () => {
 
     try {
       // 1. Gọi API đăng nhập thật xuống Backend
-      const res = await axios.post('http://localhost:3000/api/v1/admin/login', credentials);
+      const API_URL = import.meta.env.VITE_API_URL;
+      const res = await axios.post(`${API_URL}/api/v1/admin/login`, credentials);
 
       if (res.data.success) {
         // 2. Lấy dữ liệu từ Server trả về

@@ -63,10 +63,11 @@ const OfferForm = () => {
             const config = { headers: { Authorization: `Bearer ${token}` } };
 
             try {
-                const roomsRes = await axios.get('http://localhost:3000/api/v1/rooms/list-rooms', config);
+                const API_URL = import.meta.env.VITE_API_URL;
+                const roomsRes = await axios.get(`${API_URL}/api/v1/rooms/list-rooms`, config);
                 if (roomsRes.data.success) setAvailableRooms(roomsRes.data.data);
 
-                const servicesRes = await axios.get('http://localhost:3000/api/v1/full-service/list-all-for-offer', config); 
+                const servicesRes = await axios.get(`${API_URL}/api/v1/full-service/list-all-for-offer`, config); 
                 if (servicesRes.data.success) setAvailableServices(servicesRes.data.data);
             } catch (error) {
                 console.error("Lỗi tải dữ liệu:", error);
@@ -74,7 +75,8 @@ const OfferForm = () => {
 
             if (isEditMode) {
                 try {
-                    const offerRes = await axios.get(`http://localhost:3000/api/v1/offers/${id}`);
+                    const API_URL = import.meta.env.VITE_API_URL;
+                    const offerRes = await axios.get(`${API_URL}/api/v1/offers/${id}`);
                     if (offerRes.data.success) {
                         const data = offerRes.data.data;
                         setFormData({
@@ -152,7 +154,8 @@ const OfferForm = () => {
         const uploadData = new FormData();
         uploadData.append('image', file);
         try {
-            const res = await axios.post('http://localhost:3000/api/v1/upload', uploadData);
+            const API_URL = import.meta.env.VITE_API_URL;
+            const res = await axios.post(`${API_URL}/api/v1/upload`, uploadData);
             if (res.data.success) {
                 setFormData(prev => ({ ...prev, [field]: res.data.imageUrl }));
                 showSuccess("Upload ảnh thành công");
@@ -200,9 +203,10 @@ const OfferForm = () => {
         try {
             const token = localStorage.getItem('admin_token'); 
             const config = { headers: { Authorization: `Bearer ${token}` } };
+            const API_URL = import.meta.env.VITE_API_URL;
             const url = isEditMode 
-                ? 'http://localhost:3000/api/v1/offers/update' 
-                : 'http://localhost:3000/api/v1/offers/add';
+                ? `${API_URL}/api/v1/offers/update` 
+                : `${API_URL}/api/v1/offers/add`;
             const payload = isEditMode ? { ...formData, id } : formData;
 
             const response = await axios[isEditMode ? 'put' : 'post'](url, payload, config);
@@ -260,11 +264,11 @@ const OfferForm = () => {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2"><CalendarBlank size={16} /> Ngày bắt đầu</label>
+                                        <label className="text-sm font-bold text-gray-700 mb-2 flex items-center gap-2"><CalendarBlank size={16} /> Ngày bắt đầu</label>
                                         <input type="date" name="valid_from" value={formData.valid_from} onChange={handleChange} className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:border-black" />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2"><CalendarBlank size={16} /> Ngày kết thúc</label>
+                                        <label className="text-sm font-bold text-gray-700 mb-2 flex items-center gap-2"><CalendarBlank size={16} /> Ngày kết thúc</label>
                                         <input type="date" name="valid_to" value={formData.valid_to} onChange={handleChange} className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:border-black" />
                                     </div>
                                 </div>
@@ -361,7 +365,7 @@ const OfferForm = () => {
                             </div>
                             <div className="mb-6">
                                 <label className="block text-[10px] font-bold text-gray-700 mb-2 uppercase tracking-wider">Ảnh Banner</label>
-                                <div className="relative w-full aspect-[21/9] bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center overflow-hidden hover:border-black transition-all group">
+                                <div className="relative w-full aspect-21/9 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center overflow-hidden hover:border-black transition-all group">
                                     {formData.banner ? <img src={formData.banner} className="w-full h-full object-cover" alt="banner" /> : <UploadSimple size={24} className="text-gray-300" />}
                                     <input type="file" onChange={(e) => handleUpload(e, 'banner')} className="absolute inset-0 opacity-0 cursor-pointer" />
                                 </div>

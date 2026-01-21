@@ -22,7 +22,8 @@ const EmployeeManager = () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('admin_token');
-            const res = await axios.get('http://localhost:3000/api/v1/admin/list', {
+            const API_URL = import.meta.env.VITE_API_URL;
+            const res = await axios.get(`${API_URL}/api/v1/admin/list`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (res.data.success) {
@@ -47,7 +48,8 @@ const EmployeeManager = () => {
         try {
             if (isEditMode) {
                 // Cập nhật
-                const res = await axios.put('http://localhost:3000/api/v1/admin/update', {
+                const API_URL = import.meta.env.VITE_API_URL;
+                const res = await axios.put(`${API_URL}/api/v1/admin/update`, {
                     id: formData.id,
                     username: formData.username,
                     password: formData.password // Nếu rỗng backend sẽ bỏ qua
@@ -57,7 +59,8 @@ const EmployeeManager = () => {
 
             } else {
                 // Thêm mới (Dùng API add-account cũ)
-                const res = await axios.post('http://localhost:3000/api/v1/admin/add-account', {
+                const API_URL = import.meta.env.VITE_API_URL;
+                const res = await axios.post(`${API_URL}/api/v1/admin/add-account`, {
                     username: formData.username,
                     password: formData.password,
                     level: 'EMPLOYEE'
@@ -82,7 +85,8 @@ const EmployeeManager = () => {
 
         try {
             const token = localStorage.getItem('admin_token');
-            await axios.delete(`http://localhost:3000/api/v1/admin/delete/${id}`, {
+            const API_URL = import.meta.env.VITE_API_URL;
+            await axios.delete(`${API_URL}/api/v1/admin/delete/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             showSuccess("Đã xoá nhân viên.");

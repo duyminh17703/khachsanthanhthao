@@ -50,7 +50,8 @@ const RoomForm = () => {
     if (isEditMode) {
       const fetchRoom = async () => {
         try {
-          const res = await axios.get('http://localhost:3000/api/v1/rooms/list-rooms'); 
+          const API_URL = import.meta.env.VITE_API_URL;
+          const res = await axios.get(`${API_URL}/api/v1/rooms/list-rooms`); 
           const roomToEdit = res.data.data.find(r => r._id === id);
           if (roomToEdit) {
              setFormData({
@@ -84,7 +85,8 @@ const RoomForm = () => {
     data.append('image', file);
 
     try {
-        const res = await axios.post('http://localhost:3000/api/v1/upload', data, {
+        const API_URL = import.meta.env.VITE_API_URL;
+        const res = await axios.post(`${API_URL}/api/v1/upload`, data, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
 
@@ -179,7 +181,7 @@ const RoomForm = () => {
             <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
 
             {uploading && (
-                <div className="fixed inset-0 bg-black/30 z-[999] flex items-center justify-center backdrop-blur-sm">
+                <div className="fixed inset-0 bg-black/30 z-999 flex items-center justify-center backdrop-blur-sm">
                     <div className="bg-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 animate-bounce-short">
                         <Spinner className="animate-spin text-black" size={24} />
                         <span className="text-sm font-bold text-neutral-800">Đang tải ảnh lên...</span>

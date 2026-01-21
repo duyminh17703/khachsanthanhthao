@@ -32,7 +32,7 @@ const ContactPage = () => {
                 alt="Contact Hero" 
                 className="w-full h-full object-cover opacity-50 animate-scale-slow"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/40 to-transparent"></div>
+            <div className="absolute inset-0 bg-linear-to-t from-neutral-900 via-neutral-900/40 to-transparent"></div>
         </div>
         <div className="relative z-10 px-6 max-w-4xl mt-10">
             <div className="flex justify-center mb-6 text-amber-400 opacity-80 animate-fadeIn">
@@ -44,7 +44,7 @@ const ContactPage = () => {
             <h1 className="text-4xl md:text-6xl font-playfair italic font-medium text-white mb-6 leading-tight animate-fadeIn">
                 Liên hệ với chúng tôi
             </h1>
-            <div className="w-20 h-[1px] bg-white/50 mx-auto mb-8"></div>
+            <div className="w-20 h-px bg-white/50 mx-auto mb-8"></div>
             <p className="text-white/80 font-light text-lg max-w-2xl mx-auto font-serif italic">
                 "Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ để kỳ nghỉ của bạn tại Đà Lạt trở nên hoàn hảo nhất."
             </p>
@@ -173,7 +173,7 @@ const ContactPage = () => {
                                 <p className="text-neutral-500 font-light leading-relaxed text-sm md:text-base mb-8">
                                     Chúng tôi hiểu rằng giấc ngủ là điều xa xỉ nhất. Từng căn phòng tại Thanh Thảo được thiết kế tinh tế với nội thất gỗ ấm cúng, nệm tiêu chuẩn 5 sao và hệ thống cách âm tuyệt đối.
                                 </p>
-                                <div className="w-20 h-[1px] bg-amber-700"></div>
+                                <div className="w-20 h-px bg-amber-700"></div>
                             </div>
                         </div>
 
@@ -199,7 +199,7 @@ const ContactPage = () => {
                                 <p className="text-neutral-400 font-light leading-relaxed text-sm md:text-base mb-8">
                                     Đội ngũ nhân viên bản địa am hiểu Đà Lạt luôn sẵn sàng hỗ trợ 24/7. Từ việc đặt bàn tại nhà hàng hot nhất đến tư vấn lịch trình săn mây, chúng tôi chăm chút từng trải nghiệm nhỏ nhất của bạn.
                                 </p>
-                                <div className="w-20 h-[1px] bg-amber-400"></div>
+                                <div className="w-20 h-px bg-amber-400"></div>
                             </div>
                         </div>
 
@@ -225,7 +225,7 @@ const ContactPage = () => {
                                 <p className="text-neutral-500 font-light leading-relaxed text-sm md:text-base mb-8">
                                     Đặt phòng trực tiếp chưa bao giờ hời đến thế. Tặng ngay set trà chiều, ưu đãi đưa đón sân bay và chính sách linh hoạt đổi ngày. Luôn có quà tặng bất ngờ chờ đón bạn khi check-in.
                                 </p>
-                                <div className="w-20 h-[1px] bg-amber-700"></div>
+                                <div className="w-20 h-px bg-amber-700"></div>
                             </div>
                         </div>
 

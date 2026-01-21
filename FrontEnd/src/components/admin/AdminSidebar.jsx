@@ -23,7 +23,8 @@ const AdminSidebar = ({ isOpen, onClose, isCollapsed, toggleCollapse }) => {
             const token = localStorage.getItem('admin_token'); 
             if (!token) return;
 
-            const res = await axios.get('http://localhost:3000/api/v1/invoices/admin/all?status=CHỜ XÁC NHẬN', {
+            const API_URL = import.meta.env.VITE_API_URL;
+            const res = await axios.get(`${API_URL}/api/v1/invoices/admin/all?status=CHỜ XÁC NHẬN`, {
                 headers: {
                     Authorization: `Bearer ${token}` 
                 }
@@ -89,7 +90,7 @@ const AdminSidebar = ({ isOpen, onClose, isCollapsed, toggleCollapse }) => {
             fixed top-0 left-0 h-screen bg-white border-r border-neutral-100 z-50 shadow-xl lg:shadow-none
             transition-all duration-300 ease-in-out
             ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} 
-            ${isCollapsed ? 'w-[80px]' : 'w-[260px]'}
+            ${isCollapsed ? 'w-80px' : 'w-[260px]'}
         `}>
           
           <button 

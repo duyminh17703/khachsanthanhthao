@@ -61,7 +61,7 @@ const MultiDateCalendarSelector = ({ onClose, onDateSelect, initialDates, validR
 
          days.push(
            <div key={i} onClick={() => !isDisabled && handleDayClick(date)}
-             className={`h-8 w-8 flex items-center justify-center text-xs font-medium rounded-full transition-all ${isDisabled ? 'bg-neutral-100 text-neutral-300 cursor-not-allowed' : 'cursor-pointer hover:bg-neutral-200 bg-stone-50 text-neutral-600'} ${isSelected ? '!bg-black !text-white shadow-md' : ''}`}>
+             className={`h-8 w-8 flex items-center justify-center text-xs font-medium rounded-full transition-all ${isDisabled ? 'bg-neutral-100 text-neutral-300 cursor-not-allowed' : 'cursor-pointer hover:bg-neutral-200 bg-stone-50 text-neutral-600'} ${isSelected ? 'bg-black! text-white! shadow-md' : ''}`}>
               {i}
            </div>
          );
@@ -76,7 +76,7 @@ const MultiDateCalendarSelector = ({ onClose, onDateSelect, initialDates, validR
     };
   
     return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4 animate-fade-in">
+      <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/50 p-4 animate-fade-in">
         <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-sm animate-scale-up">
             <div className="flex justify-between items-center mb-4 border-b border-neutral-100 pb-2">
                 <h3 className="font-bold text-sm uppercase">Chọn ngày dịch vụ</h3>
@@ -148,7 +148,8 @@ const InvoiceDetail = () => {
 
   const fetchDetail = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/api/v1/invoices/detail/${code}`, { headers: { Authorization: `Bearer ${token}` } });
+      const API_URL = import.meta.env.VITE_API_URL;
+      const res = await axios.get(`${API_URL}/api/v1/invoices/detail/${code}`, { headers: { Authorization: `Bearer ${token}` } });
       if (res.data.success) { setBooking(res.data.data); setInfoForm(res.data.data.customer_info); }
     } catch (error) { showError("Lỗi tải đơn"); } finally { setLoading(false); }
   };
@@ -167,14 +168,16 @@ const InvoiceDetail = () => {
   const handleSaveCustomerInfo = async () => {
       if (isLocked) return;
       try {
-          const res = await axios.put('http://localhost:3000/api/v1/invoices/admin/update-customer', { id: booking._id, customer_info: infoForm }, { headers: { Authorization: `Bearer ${token}` } });
+          const API_URL = import.meta.env.VITE_API_URL;
+          const res = await axios.put(`${API_URL}/api/v1/invoices/admin/update-customer`, { id: booking._id, customer_info: infoForm }, { headers: { Authorization: `Bearer ${token}` } });
           if (res.data.success) { showSuccess("Đã lưu thông tin"); setBooking(res.data.data); setIsEditingInfo(false); }
       } catch (error) { showError("Lỗi cập nhật"); }
   };
 
   const handleInvoiceAction = async (newStatus) => {
       try {
-        const res = await axios.put('http://localhost:3000/api/v1/invoices/admin/update-status', { id: booking._id, status: newStatus }, { headers: { Authorization: `Bearer ${token}` } });
+        const API_URL = import.meta.env.VITE_API_URL;
+        const res = await axios.put(`${API_URL}/api/v1/invoices/admin/update-status`, { id: booking._id, status: newStatus }, { headers: { Authorization: `Bearer ${token}` } });
         if (res.data.success) { showSuccess("Cập nhật thành công"); setBooking(res.data.data); }
       } catch (error) { showError("Lỗi cập nhật"); }
   };
@@ -187,7 +190,8 @@ const InvoiceDetail = () => {
       }
       if (isLocked) return;
       try {
-          const res = await axios.put('http://localhost:3000/api/v1/invoices/admin/update-room-status', { invoiceId: booking._id, roomId, roomStatus: newStatus }, { headers: { Authorization: `Bearer ${token}` } });
+          const API_URL = import.meta.env.VITE_API_URL;
+          const res = await axios.put(`${API_URL}/api/v1/invoices/admin/update-room-status`, { invoiceId: booking._id, roomId, roomStatus: newStatus }, { headers: { Authorization: `Bearer ${token}` } });
           if (res.data.success) { showSuccess("Đã cập nhật phòng"); setBooking(res.data.data); }
       } catch (error) { showError("Lỗi cập nhật"); }
   };
@@ -200,7 +204,8 @@ const InvoiceDetail = () => {
 
   const saveRoomDate = async (roomId) => {
       try {
-          const res = await axios.put('http://localhost:3000/api/v1/invoices/admin/update-room-dates', { invoiceId: booking._id, roomId, checkIn: roomForm.check_in, checkOut: roomForm.check_out }, { headers: { Authorization: `Bearer ${token}` } });
+          const API_URL = import.meta.env.VITE_API_URL;
+          const res = await axios.put(`${API_URL}/api/v1/invoices/admin/update-room-dates`, { invoiceId: booking._id, roomId, checkIn: roomForm.check_in, checkOut: roomForm.check_out }, { headers: { Authorization: `Bearer ${token}` } });
           if (res.data.success) { showSuccess("Đã tính lại tiền phòng!"); setBooking(res.data.data); setEditingRoomId(null); }
       } catch (error) { showError(error.response?.data?.message || "Lỗi cập nhật ngày"); }
   };
@@ -220,7 +225,8 @@ const InvoiceDetail = () => {
           setEditingServiceId(null); return;
       }
       try {
-          const res = await axios.put('http://localhost:3000/api/v1/invoices/admin/update-service-dates', { invoiceId: booking._id, serviceItemId: editingServiceId, newDates }, { headers: { Authorization: `Bearer ${token}` } });
+          const API_URL = import.meta.env.VITE_API_URL;
+          const res = await axios.put(`${API_URL}/api/v1/invoices/admin/update-service-dates`, { invoiceId: booking._id, serviceItemId: editingServiceId, newDates }, { headers: { Authorization: `Bearer ${token}` } });
           if(res.data.success) { showSuccess("Đã cập nhật lịch!"); setBooking(res.data.data); }
       } catch (error) { showError("Lỗi cập nhật"); } finally { setEditingServiceId(null); }
   };
@@ -229,7 +235,8 @@ const InvoiceDetail = () => {
       if (isLocked) return;
       if(!await showConfirm("Xoá dịch vụ này?")) return;
       try {
-          const res = await axios.delete('http://localhost:3000/api/v1/invoices/admin/remove-service', { headers: { Authorization: `Bearer ${token}` }, data: { invoiceId: booking._id, serviceItemId: serviceId } });
+          const API_URL = import.meta.env.VITE_API_URL;
+          const res = await axios.delete(`${API_URL}/api/v1/invoices/admin/remove-service`, { headers: { Authorization: `Bearer ${token}` }, data: { invoiceId: booking._id, serviceItemId: serviceId } });
           if(res.data.success) { showSuccess("Đã xoá"); setBooking(res.data.data); }
       } catch (error) { showError("Lỗi xoá"); }
   };

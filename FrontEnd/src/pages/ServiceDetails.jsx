@@ -194,7 +194,8 @@ const ServiceDetails = () => {
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/v1/full-service/${slug}`);
+        const API_URL = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${API_URL}/api/v1/full-service/${slug}`);
         if (response.data.success) {
           const fetchedService = response.data.data;
           setService(fetchedService);
@@ -262,7 +263,8 @@ const ServiceDetails = () => {
                   cleanCode = `FS-${cleanCode}`;
               }
               
-              const response = await axios.get(`http://localhost:3000/api/v1/invoices/validate/${cleanCode}`);
+              const API_URL = import.meta.env.VITE_API_URL;
+              const response = await axios.get(`${API_URL}/api/v1/invoices/validate/${cleanCode}`);
               
               if (response.data.success) {
                   setIsValidBooking(true);

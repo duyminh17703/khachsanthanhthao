@@ -30,7 +30,8 @@ const OfferPage = () => {
         const fetchOffers = async () => {
             try {
                 // [CẬP NHẬT 1] Thêm tham số ?is_public=true để chỉ lấy Offer đang mở
-                const res = await axios.get('http://localhost:3000/api/v1/offers/list?is_public=true');
+                const API_URL = import.meta.env.VITE_API_URL;
+                const res = await axios.get(`${API_URL}/api/v1/offers/list?is_public=true`);
                 if (res.data.success) setOffers(res.data.data);
             } catch (error) {
                 console.error("Lỗi tải combo:", error);

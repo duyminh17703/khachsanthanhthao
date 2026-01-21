@@ -130,7 +130,7 @@ const CalendarSelector = ({ onClose, onDateSelect, initialStartDate, initialEndD
              ${isDisabled 
                 ? 'text-neutral-300 cursor-not-allowed bg-neutral-50 line-through' 
                 : 'text-neutral-600 hover:bg-stone-100 cursor-pointer'}
-             ${isSelectedOrRange ? '!bg-black !text-white hover:!bg-neutral-800' : ''}
+             ${isSelectedOrRange ? 'bg-black! text-white! hover:bg-neutral-800!' : ''}
            `}
          >
             {i}
@@ -187,7 +187,8 @@ const OfferDetails = () => {
   useEffect(() => {
     const fetchOffer = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/v1/offers/slug/${slug}`);
+        const API_URL = import.meta.env.VITE_API_URL;
+        const res = await axios.get(`${API_URL}/api/v1/offers/slug/${slug}`);
         if (res.data.success) {
           setOffer(res.data.data);
           fetchAvailability(res.data.data._id); // Gọi lấy lịch bận sau khi có ID Combo
@@ -203,7 +204,8 @@ const OfferDetails = () => {
 
   const fetchAvailability = async (offerId) => {
     try {
-      const res = await axios.get(`http://localhost:3000/api/v1/offers/availability/${offerId}`);
+      const API_URL = import.meta.env.VITE_API_URL;
+      const res = await axios.get(`${API_URL}/api/v1/offers/availability/${offerId}`);
       if (res.data.success) {
         setBookedRanges(res.data.data);
       }
@@ -253,15 +255,15 @@ const OfferDetails = () => {
                 <form className="flex flex-col xl:flex-row items-end justify-center gap-6 md:gap-8 w-full">
                     <div className="relative w-full md:w-[400px] xl:flex-1">
                         <label className="block text-[10px] font-bold tracking-[0.2em] uppercase text-neutral-500 mb-2">Thời gian lưu trú</label>
-                        <div onClick={() => setActivePopup(activePopup === 'calendar' ? null : 'calendar')} className={`bg-stone-50 p-3 flex items-center justify-between h-[56px] cursor-pointer hover:bg-stone-100 border-b border-neutral-300 ${activePopup === 'calendar' ? 'ring-1 ring-black bg-white' : ''}`}>
+                        <div onClick={() => setActivePopup(activePopup === 'calendar' ? null : 'calendar')} className={`bg-stone-50 p-3 flex items-center justify-between h-14 cursor-pointer hover:bg-stone-100 border-b border-neutral-300 ${activePopup === 'calendar' ? 'ring-1 ring-black bg-white' : ''}`}>
                             <span className="text-lg font-serif italic text-neutral-800">{checkInDate && checkOutDate ? `${formatDateVN(checkInDate)} - ${formatDateVN(checkOutDate)}` : "Chọn ngày..."}</span>
                             <CalendarBlank size={24} className="text-neutral-400" />
                         </div>
                         {activePopup === 'calendar' && <CalendarSelector onClose={() => setActivePopup(null)} onDateSelect={(s, e) => { setCheckInDate(s); setCheckOutDate(e); }} initialStartDate={checkInDate} initialEndDate={checkOutDate} validFrom={offer.valid_from} validTo={offer.valid_to} bookedRanges={bookedRanges}/>}
                     </div>
                     <div className="flex flex-col md:flex-row gap-3 w-full xl:w-auto">
-                        <button type="button" onClick={handleBookNow} className="flex items-center justify-center gap-3 h-[56px] px-10 bg-neutral-900 text-white text-[11px] font-bold uppercase tracking-[0.15em] cursor-pointer hover:bg-black transition-all w-full md:w-auto min-w-[220px]"><CreditCard size={20} weight="bold" /> Đặt ngay</button>
-                        <button type="button" onClick={handleAddToCart} className="group flex items-center justify-center gap-3 h-[56px] px-8 border border-neutral-300 bg-white text-neutral-900 text-[11px] font-bold uppercase tracking-[0.15em] hover:bg-neutral-50 cursor-pointer transition-all w-full md:w-auto min-w-[200px]"><ShoppingCartSimple size={20} weight="bold" className="text-neutral-500 group-hover:text-neutral-900" /> Thêm vào giỏ</button>
+                        <button type="button" onClick={handleBookNow} className="flex items-center justify-center gap-3 h-14 px-10 bg-neutral-900 text-white text-[11px] font-bold uppercase tracking-[0.15em] cursor-pointer hover:bg-black transition-all w-full md:w-auto min-w-[220px]"><CreditCard size={20} weight="bold" /> Đặt ngay</button>
+                        <button type="button" onClick={handleAddToCart} className="group flex items-center justify-center gap-3 h-14 px-8 border border-neutral-300 bg-white text-neutral-900 text-[11px] font-bold uppercase tracking-[0.15em] hover:bg-neutral-50 cursor-pointer transition-all w-full md:w-auto min-w-[200px]"><ShoppingCartSimple size={20} weight="bold" className="text-neutral-500 group-hover:text-neutral-900" /> Thêm vào giỏ</button>
                     </div>
                 </form>
             </div>
@@ -270,12 +272,12 @@ const OfferDetails = () => {
         {/* --- HERO SECTION --- */}
         <div className="relative h-[80vh] w-full overflow-hidden">
             <img src={offer.banner || offer.thumbnail} alt={offer.title} className="w-full h-full object-cover animate-scale-slow"/>
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+            <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent"></div>
             <div className="absolute bottom-0 left-0 w-full flex flex-col items-center justify-end pb-16 px-6 z-10 text-center">
                 <div className="flex items-center gap-3 text-xs md:text-sm font-bold tracking-[0.3em] uppercase text-white/80 mb-4 bg-white/10 backdrop-blur-md px-6 py-2 rounded-full border border-white/20">
                     <Tag size={16} weight="fill" className="text-amber-400"/> Gói ưu đãi đặc biệt
                 </div>
-                <h1 className="text-3xl md:text-6xl font-playfair italic font-semibold text-white uppercase tracking-[0.1em] mb-6 drop-shadow-xl max-w-5xl leading-tight">{offer.title}</h1>
+                <h1 className="text-3xl md:text-6xl font-playfair italic font-semibold text-white uppercase tracking-widest mb-6 drop-shadow-xl max-w-5xl leading-tight">{offer.title}</h1>
                 {offer.valid_to && <p className="text-white/80 font-serif italic text-lg mb-8">Áp dụng đến: {formatDateVN(offer.valid_to)}</p>}
                 <button onClick={handleOpenBooking} className="group relative overflow-hidden border border-white/30 bg-white/10 backdrop-blur-sm text-white px-10 py-4 transition-all cursor-pointer duration-300 hover:bg-white hover:text-black"><span className="text-xs font-bold uppercase tracking-[0.25em]">Đặt gói combo này</span></button>
             </div>
@@ -333,7 +335,7 @@ const OfferDetails = () => {
                                             </div>
                                             
                                             <div className="flex flex-col justify-center py-2 pr-8">
-                                                <h4 className="font-playfair text-xl md:text-2xl text-neutral-900 italic mb-2 group-hover:text-amber-800 transition-colors decoration-clone">
+                                                <h4 className="font-playfair text-xl md:text-2xl text-neutral-900 italic mb-2 group-hover:text-amber-800 transition-colors box-decoration-clone">
                                                     {item.room_id?.title || "Phòng nghỉ cao cấp"}
                                                 </h4>
                                                 {item.room_id?.base_price && (
@@ -422,7 +424,7 @@ const OfferDetails = () => {
                                                     {/* Note */}
                                                     {svc.note && (
                                                         <div className="mt-3 flex items-start gap-2 text-[11px] text-neutral-500 italic bg-stone-50 p-2 rounded-sm">
-                                                            <CheckCircle size={14} className="text-green-600 shrink-0 mt-[1px]" weight="fill"/>
+                                                            <CheckCircle size={14} className="text-green-600 shrink-0 mt-px" weight="fill"/>
                                                             <span>{svc.note}</span>
                                                         </div>
                                                     )}

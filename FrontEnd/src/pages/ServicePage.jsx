@@ -70,7 +70,8 @@ const ServiceListingPage = ({ serviceType }) => {
     const fetchServices = async () => {
       setLoading(true);
       try {
-        const response = await axios.get('http://localhost:3000/api/v1/full-service/list-by-type', {
+        const API_URL = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${API_URL}/api/v1/full-service/list-by-type`, {
             params: { type: serviceType }
         });
         setServices(response.data.data); 
@@ -114,7 +115,7 @@ const ServiceListingPage = ({ serviceType }) => {
                 {items.map((item) => (
                   <div key={item._id} className="group cursor-pointer">
                     {/* Image Card */}
-                    <div className="overflow-hidden mb-6 relative aspect-[4/5] bg-neutral-100">
+                    <div className="overflow-hidden mb-6 relative aspect-4/5 bg-neutral-100">
                       <Link to={`${config.baseLink}/${item.slug}`}>
                         <img 
                           src={item.gallery?.[0] || 'https://via.placeholder.com/400x500'} 
@@ -168,7 +169,7 @@ const ServiceListingPage = ({ serviceType }) => {
                 alt={config.title} 
                 className="w-full h-full object-cover opacity-60 animate-scale-slow"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+            <div className="absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent"></div>
         </div>
 
         {/* Content */}
@@ -182,7 +183,7 @@ const ServiceListingPage = ({ serviceType }) => {
             <h1 className="text-4xl md:text-6xl font-playfair italic font-medium text-white mb-6 leading-tight animate-fadeIn">
                 {config.title}
             </h1>
-            <div className="w-20 h-[1px] bg-white/50 mx-auto mb-8"></div>
+            <div className="w-20 h-px bg-white/50 mx-auto mb-8"></div>
         </div>
       </div>
 

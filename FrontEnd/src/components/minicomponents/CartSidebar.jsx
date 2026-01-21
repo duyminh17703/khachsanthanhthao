@@ -31,11 +31,11 @@ const CartSidebar = () => {
     return (
         <>
             <div 
-                className={`fixed inset-0 bg-black/60 z-[60] transition-opacity duration-500 ${isCartOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+                className={`fixed inset-0 bg-black/60 z-60 transition-opacity duration-500 ${isCartOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
                 onClick={() => setIsCartOpen(false)}
             ></div>
 
-            <div className={`fixed top-0 right-0 h-full w-full md:w-[500px] bg-white z-[70] shadow-2xl transform transition-transform duration-500 ease-[cubic-bezier(0.77,0,0.175,1)] ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+            <div className={`fixed top-0 right-0 h-full w-full md:w-[500px] bg-white z-70 shadow-2xl transform transition-transform duration-500 ease-[cubic-bezier(0.77,0,0.175,1)] ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
                 
                 {/* Header */}
                 <div className="flex items-center justify-between p-8 border-b border-neutral-100 bg-white sticky top-0 z-10">
@@ -142,7 +142,7 @@ const CartSidebar = () => {
                                 setIsCartOpen(false);
                                 navigate('/checkout');
                             }}
-                            className="w-full bg-black text-white h-[56px] text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 cursor-pointer transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                            className="w-full bg-black text-white h-56px text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 cursor-pointer transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
                         >
                             <span>Thanh toán ngay</span>
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"/></svg>

@@ -151,7 +151,7 @@ const CalendarSelector = ({ onClose, onDateSelect, initialStartDate, initialEndD
                 ? 'text-neutral-300 bg-neutral-100 cursor-not-allowed line-through decoration-neutral-300' // Style cho ngày đã bị đặt
                 : 'text-neutral-600 cursor-pointer hover:bg-stone-100'
              }
-             ${isSelectedOrRange ? '!bg-black !text-white hover:!bg-neutral-800' : ''}
+             ${isSelectedOrRange ? 'bg-black! text-white! hover:bg-neutral-800!' : ''}
            `}
          >
             {i}
@@ -239,7 +239,8 @@ const RoomDetails = () => {
   useEffect(() => {
     const fetchRoom = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/v1/rooms/${slug}`);
+        const API_URL = import.meta.env.VITE_API_URL;
+        const response = await axios.get(`${API_URL}/api/v1/rooms/${slug}`);
         if (response.data.success) {
           const data = response.data.data; 
           setRoom(data);
@@ -256,7 +257,8 @@ const RoomDetails = () => {
   
   const fetchAvailability = async (roomId) => {
       try {
-          const res = await axios.get(`http://localhost:3000/api/v1/rooms/availability/${roomId}`);
+          const API_URL = import.meta.env.VITE_API_URL;
+          const res = await axios.get(`${API_URL}/api/v1/rooms/availability/${roomId}`);
           if(res.data.success) {
               setBookedRanges(res.data.data);
           }
@@ -398,7 +400,7 @@ const RoomDetails = () => {
                     <div 
                        onClick={() => setActivePopup(activePopup === 'calendar' ? null : 'calendar')}
                        className={`
-                           bg-stone-50 p-3 flex items-center justify-between h-[56px] cursor-pointer 
+                           bg-stone-50 p-3 flex items-center justify-between h-14 cursor-pointer 
                            hover:bg-stone-100 transition-colors border-b border-neutral-300
                            ${activePopup === 'calendar' ? 'ring-1 ring-black bg-white' : ''}
                        `}
@@ -429,7 +431,7 @@ const RoomDetails = () => {
                     <button 
                         type="button"
                         onClick={handleBookNow}
-                        className="flex items-center justify-center gap-3 h-[56px] px-10 bg-neutral-900 text-white text-[11px] font-bold uppercase tracking-[0.15em] cursor-pointer hover:bg-black hover:shadow-xl hover:-translate-y-1 transition-all duration-300 w-full md:w-auto min-w-[220px]"
+                        className="flex items-center justify-center gap-3 h-14 px-10 bg-neutral-900 text-white text-[11px] font-bold uppercase tracking-[0.15em] cursor-pointer hover:bg-black hover:shadow-xl hover:-translate-y-1 transition-all duration-300 w-full md:w-auto min-w-[220px]"
                     >
                         <CreditCard size={20} weight="bold" />
                         Thanh toán ngay
@@ -438,7 +440,7 @@ const RoomDetails = () => {
                     <button 
                         type="button"
                         onClick={handleAddToCart}
-                        className="group flex items-center justify-center gap-3 h-[56px] px-8 border border-neutral-300 bg-white text-neutral-900 text-[11px] font-bold uppercase tracking-[0.15em] cursor-pointer hover:border-neutral-900 hover:bg-neutral-50 transition-all duration-300 w-full md:w-auto min-w-[200px]"
+                        className="group flex items-center justify-center gap-3 h-14 px-8 border border-neutral-300 bg-white text-neutral-900 text-[11px] font-bold uppercase tracking-[0.15em] cursor-pointer hover:border-neutral-900 hover:bg-neutral-50 transition-all duration-300 w-full md:w-auto min-w-[200px]"
                     >
                         <ShoppingCartSimple size={20} weight="bold" className="text-neutral-500 group-hover:text-neutral-900 transition-colors" />
                         Thêm vào giỏ
@@ -451,14 +453,14 @@ const RoomDetails = () => {
       {/* --- HERO SECTION --- */}
       <div className="relative h-screen w-full overflow-hidden">
         <img src={room.hero.image} alt={room.title} className="w-full h-full object-cover animate-scale-slow"/>
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+        <div className="absolute inset-0 bg-linear-to-t from-black via-black/60 to-transparent"></div>
         <div className="absolute bottom-0 left-0 w-full flex flex-col items-center justify-end pb-16 px-6 z-10 text-center">
             <h1 className="text-3xl md:text-6xl font-playfair italic font-semibold text-white uppercase tracking-[0.15em] mb-15 drop-shadow-xl">
                 {room.title}
             </h1>
             <div className="max-w-3xl mx-auto mb-8">
                 <p className="text-lg md:text-xl text-white/90 leading-relaxed italic font-light">"{room.hero.subtitle || room.title}"</p>
-                <div className="w-24 h-[1px] bg-white/70 mx-auto mt-6"></div>
+                <div className="w-24 h-px bg-white/70 mx-auto mt-6"></div>
             </div>
             {room.is_available === false ? (
                <div className="border border-neutral-500 bg-neutral-900/50 text-neutral-400 w-full md:w-auto px-10 py-4 flex flex-col items-center justify-center gap-1 cursor-not-allowed backdrop-blur-sm">
@@ -488,7 +490,7 @@ const RoomDetails = () => {
       <div className="w-full overflow-hidden my-24 group">
          <div className="text-center mb-12">
             <h3 className="text-xl md:text-2xl font-serif uppercase tracking-[0.2em] text-neutral-900">Ảnh phòng</h3>
-            <div className="w-12 h-[1px] bg-neutral-400 mx-auto mt-4"></div>
+            <div className="w-12 h-px bg-neutral-400 mx-auto mt-4"></div>
          </div>
 
          <Swiper
@@ -519,7 +521,7 @@ const RoomDetails = () => {
             <h3 className="text-2xl font-serif uppercase tracking-[0.2em] text-neutral-900">
                Chi tiết phòng
             </h3>
-            <div className="w-12 h-[1px] bg-neutral-400 mx-auto mt-4"></div>
+            <div className="w-12 h-px bg-neutral-400 mx-auto mt-4"></div>
          </div>
          
          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-15 gap-y-15">
@@ -595,7 +597,7 @@ const RoomDetails = () => {
             <h3 className="text-xl uppercase tracking-[0.2em] text-neutral-900">
                Tiện ích & Dịch vụ
             </h3>
-             <div className="w-12 h-[1px] bg-neutral-400 mx-auto mt-4"></div>
+             <div className="w-12 h-px bg-neutral-400 mx-auto mt-4"></div>
          </div>
 
          <div className="border-b border-neutral-200">
@@ -608,7 +610,7 @@ const RoomDetails = () => {
       {/* 5. BOTTOM CTA BAR */}
       <div className="bg-white py-16 md:py-24">
          <div className="container mx-auto px-4 md:px-6 max-w-7xl">
-            <div className="bg-neutral-900 rounded-[2rem] p-8 md:p-12 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+            <div className="bg-neutral-900 rounded-4xl p-8 md:p-12 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
 
                <div className="text-center md:text-left z-10">
@@ -625,7 +627,7 @@ const RoomDetails = () => {
                   </div>
                </div>
 
-               <div className="hidden md:block w-[1px] h-20 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+               <div className="hidden md:block w-px h-20 bg-linear-to-b from-transparent via-white/20 to-transparent"></div>
 
                <div className="z-10 w-full md:w-auto">
                    {room.is_available === false ? (
@@ -643,7 +645,7 @@ const RoomDetails = () => {
                         onClick={handleOpenBooking}
                         className="group relative bg-white text-black w-full md:w-auto px-12 py-5 rounded-full overflow-hidden transition-all cursor-pointer duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:scale-105"
                      >
-                        <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-neutral-100/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
+                        <div className="absolute inset-0 w-full h-full bg-linear-to-r from-transparent via-neutral-100/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
                         <span className="relative text-xs md:text-sm font-bold uppercase tracking-[0.25em] flex items-center justify-center gap-3">
                               Đặt phòng ngay
                               <ArrowRight size={20} weight="bold" className="transition-transform duration-300 group-hover:translate-x-1" />

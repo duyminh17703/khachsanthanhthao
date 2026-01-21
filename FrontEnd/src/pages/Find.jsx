@@ -21,7 +21,8 @@ const Find = () => {
     setInvoice(null);
 
     try {
-      const res = await axios.get(`http://localhost:3000/api/v1/invoices/search/${code.trim()}`);
+      const API_URL = import.meta.env.VITE_API_URL;
+      const res = await axios.get(`${API_URL}/api/v1/invoices/search/${code.trim()}`);
       if (res.data.success) {
         setInvoice(res.data.data);
       }
@@ -35,7 +36,8 @@ const Find = () => {
   const handleRepayment = async () => {
     try {
         // Gọi API tạo lại link thanh toán
-        const res = await axios.post('http://localhost:3000/api/v1/invoices/create_payment_url', {
+        const API_URL = import.meta.env.VITE_API_URL;
+        const res = await axios.post(`${API_URL}/api/v1/invoices/create_payment_url`, {
             booking_code: invoice.booking_code
         });
         

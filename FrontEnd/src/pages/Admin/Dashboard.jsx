@@ -21,7 +21,8 @@ const Dashboard = () => {
       try {
           const token = localStorage.getItem('admin_token');
           // Truyền range vào query string
-          const res = await axios.get(`http://localhost:3000/api/v1/invoices/admin/dashboard-stats?range=${timeRange}`, {
+          const API_URL = import.meta.env.VITE_API_URL;
+          const res = await axios.get(`${API_URL}/api/v1/invoices/admin/dashboard-stats?range=${timeRange}`, {
               headers: { Authorization: `Bearer ${token}` }
           });
           if (res.data.success) setData(res.data);
@@ -209,7 +210,7 @@ const Dashboard = () => {
                             {data.serviceStats.map((svc, index) => (
                                 <div key={index} className="flex gap-4 items-start">
                                     {/* Cột Trái: Ảnh */}
-                                    <div className="w-12 h-12 flex-shrink-0 overflow-hidden rounded-lg bg-neutral-100 border border-neutral-200">
+                                    <div className="w-12 h-12 shrink-0 overflow-hidden rounded-lg bg-neutral-100 border border-neutral-200">
                                         {svc.image ? (
                                             <img 
                                                 src={svc.image} 
