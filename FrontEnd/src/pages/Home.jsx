@@ -7,6 +7,7 @@ import FeatureOffers from "../components/home/FeatureOffers";
 import FeatureDiscover from "../components/home/FeatureDiscover";
 import FeatureFood from "../components/home/FeatureFood";
 import FeatureServices from "../components/home/FeatureServices";
+import Footer from "../layout/Footer";
 
 const Home = () => {
   return (
@@ -17,6 +18,7 @@ const Home = () => {
       <FeatureDiscover />
       <FeatureFood />
       <FeatureServices />
+      <Footer />
     </MainLayout>
   );
 };

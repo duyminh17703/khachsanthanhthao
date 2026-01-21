@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import MainLayout from '../layout/MainLayout';
+import Footer from '../components/Footer';
 import { 
     MapPin, Phone, Envelope, Clock, PaperPlaneRight, 
     FacebookLogo, InstagramLogo, YoutubeLogo, ChatCircleText, Car,
@@ -232,6 +233,8 @@ const ContactPage = () => {
                     </div>
                 </div>
             </div>
+
+            <Footer />
     </MainLayout>
   );
 };
