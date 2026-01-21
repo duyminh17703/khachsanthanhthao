@@ -34,7 +34,7 @@ const AdminLayout = ({ children, title }) => {
       <main 
         className={`
             flex-1 w-full p-4 lg:p-8 transition-all duration-300 ease-in-out
-            ${isCollapsed ? 'lg:ml-[80px]' : 'lg:ml-[260px]'}
+            ${isCollapsed ? 'lg:ml-20' : 'lg:ml-[260px]'}
         `}
       >
         
