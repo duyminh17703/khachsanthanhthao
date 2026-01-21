@@ -61,7 +61,7 @@ const OfferManager = () => {
         <AdminLayout title="Quản Lý Ưu Đãi">
             {/* Header */}
                 <div className="flex justify-end items-center mb-8">
-                    <Link to="/hotel/admin/offers/add" className="bg-black text-white px-6 py-3 rounded-lg flex items-center gap-2 text-sm font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors">
+                    <Link to="/hotel/admin/uu-dai/them" className="bg-black text-white px-6 py-3 rounded-lg flex items-center gap-2 text-sm font-bold uppercase tracking-wider hover:bg-gray-800 transition-colors">
                         <Plus size={18} weight="bold" /> Thêm Combo Mới
                     </Link>
                 </div>
@@ -139,7 +139,7 @@ const OfferManager = () => {
                                         </span>
                                         <div className="flex gap-2">
                                             <Link 
-                                                to={`/hotel/admin/offers/edit/${offer._id}`}
+                                                to={`/hotel/admin/uu-dai/sua/${offer._id}`}
                                                 className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                                             >
                                                 <PencilSimple size={20} />

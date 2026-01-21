@@ -41,27 +41,27 @@ const AdminSidebar = ({ isOpen, onClose, isCollapsed, toggleCollapse }) => {
     fetchPendingCount();
     
     // (Tuỳ chọn) Polling mỗi 30s để cập nhật real-time đơn mới
-    const interval = setInterval(fetchPendingCount, 30000);
+    const interval = setInterval(fetchPendingCount, 10000);
     return () => clearInterval(interval);
   }, [location.pathname]);
 
   const menuItems = [
-    { name: 'Dashboard', path: '/hotel/admin/dashboard', icon: <SquaresFour size={24} />, restricted: false },
+    { name: 'Dashboard', path: '/hotel/admin/dashboard', icon: <SquaresFour size={24} />, restricted: true },
     
     // [SỬA] Thêm badgeCount cho mục Booking
     { 
-        name: 'Quản lý hoá đơn&đặt phòng',   
-        path: '/hotel/admin/invoices',  
+        name: 'Quản lý hoá đơn & đặt phòng',   
+        path: '/hotel/admin/hoa-don',  
         icon: <CalendarCheck size={24} />, 
         restricted: false,
         badgeCount: pendingBookings // Truyền số lượng vào đây
     },
-    { name: 'Quản lý phòng',      path: '/hotel/admin/rooms',     icon: <Bed size={24} />,           restricted: true },
-    { name: 'Quản lý mục khám phá',  path: '/hotel/admin/discover',  icon: <Compass size={24} />,       restricted: true },
-    { name: 'Quản lý mục ẩm thực',    path: '/hotel/admin/dining',    icon: <ForkKnife size={24} />,     restricted: true },
-    { name: 'Quản lý mục trải nghiệm',   path: '/hotel/admin/experience',  icon: <Sparkle size={24} />,       restricted: true },
-    { name: 'Quản lý ưu đãi',     path: '/hotel/admin/offers',    icon: <Tag size={24} />,           restricted: true },
-    { name: 'Quản lý nhân viên',  path: '/hotel/admin/employees', icon: <Users size={24} />,         restricted: true }, 
+    { name: 'Quản lý phòng',      path: '/hotel/admin/phong',     icon: <Bed size={24} />,           restricted: true },
+    { name: 'Quản lý mục khám phá',  path: '/hotel/admin/kham-pha',  icon: <Compass size={24} />,       restricted: true },
+    { name: 'Quản lý mục ẩm thực',    path: '/hotel/admin/am-thuc',    icon: <ForkKnife size={24} />,     restricted: true },
+    { name: 'Quản lý mục trải nghiệm',   path: '/hotel/admin/trai-nghiem',  icon: <Sparkle size={24} />,       restricted: true },
+    { name: 'Quản lý ưu đãi',     path: '/hotel/admin/uu-dai',    icon: <Tag size={24} />,           restricted: true },
+    { name: 'Quản lý nhân viên',  path: '/hotel/admin/nhan-vien', icon: <Users size={24} />,         restricted: true }, 
   ];
 
   const handleLogout = async () => { 

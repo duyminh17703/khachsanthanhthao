@@ -219,13 +219,13 @@ const CalendarSelector = ({ onClose, onDateSelect, initialStartDate, initialEndD
 const Navbar = () => {
   const navLinks = [
     { name: "TRANG CHỦ", path: "/" },
-    { name: "XEM PHÒNG", path: "/list-rooms" },
-    { name: "TRẢI NGHIỆM", path: "/experience" },
-    { name: "KHÁM PHÁ", path: "/discover" },
-    { name: "ẨM THỰC", path: "/dining" },
-    { name: "ƯU ĐÃI", path: "/offers" },
-    { name: "TRA CỨU", path: "/find" },
-    { name: "LIÊN HỆ", path: "/contact" },
+    { name: "XEM PHÒNG", path: "/danh-sach-phong" },
+    { name: "TRẢI NGHIỆM", path: "/trai-nghiem" },
+    { name: "KHÁM PHÁ", path: "/kham-pha" },
+    { name: "ẨM THỰC", path: "/am-thuc" },
+    { name: "ƯU ĐÃI", path: "/uu-dai" },
+    { name: "TRA CỨU", path: "/tim-kiem" },
+    { name: "LIÊN HỆ", path: "/lien-he" },
   ];
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -283,7 +283,7 @@ const Navbar = () => {
         setIsBookingOpen(false); 
         
         // Điều hướng đến trang chi tiết phòng
-        navigate(`/rooms/${targetRoom.slug}`, { 
+        navigate(`/danh-sach-phong/${targetRoom.slug}`, { 
            state: { 
               checkInDate, 
               checkOutDate,

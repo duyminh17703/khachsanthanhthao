@@ -212,7 +212,7 @@ const OfferForm = () => {
             const response = await axios[isEditMode ? 'put' : 'post'](url, payload, config);
             if (response.data.success) {
                 showSuccess(isEditMode ? "Cập nhật thành công!" : "Tạo ưu đãi thành công!");
-                navigate('/hotel/admin/offers');
+                navigate('/hotel/admin/uu-dai');
             }
         } catch (error) {
             console.error("Lỗi Submit:", error);
@@ -233,7 +233,7 @@ const OfferForm = () => {
         <AdminLayout title={isEditMode ? 'Chỉnh Sửa Ưu Đãi' : 'Thêm Ưu Đãi Mới'}>
             <div className="max-w-7xl mx-auto">
                 <div className="flex items-center gap-4 mb-8">
-                    <button onClick={() => navigate('/hotel/admin/offers')} className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-600">
+                    <button onClick={() => navigate('/hotel/admin/uu-dai')} className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-600">
                         <ArrowLeft size={24} />
                     </button>
                     <div>

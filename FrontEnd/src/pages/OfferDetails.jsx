@@ -234,7 +234,7 @@ const OfferDetails = () => {
       const directItem = {
           type: 'OFFER', itemId: offer._id, title: offer.title, image: offer.thumbnail, price: offer.combo_price, checkIn: checkInDate, checkOut: checkOutDate, nights: nights, totalPrice: offer.combo_price * 1, quantity: 1
       };
-      setShowBooking(false); navigate('/checkout', { state: { directBooking: directItem } });
+      setShowBooking(false); navigate('/thanh-toan', { state: { directBooking: directItem } });
   };
 
   if (loading) return <MainLayout><div className="h-screen flex items-center justify-center text-xs font-bold tracking-widest uppercase animate-pulse">Đang tải dữ liệu...</div></MainLayout>;

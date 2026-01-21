@@ -140,9 +140,9 @@ const CartSidebar = () => {
                         <button
                             onClick={() => {
                                 setIsCartOpen(false);
-                                navigate('/checkout');
+                                navigate('/thanh-toan');
                             }}
-                            className="w-full bg-black text-white h-56px text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 cursor-pointer transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                            className="w-full bg-black text-white h-14 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-neutral-800 cursor-pointer transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
                         >
                             <span>Thanh toán ngay</span>
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"/></svg>

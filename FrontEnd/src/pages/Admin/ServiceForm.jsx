@@ -25,6 +25,12 @@ const PAGE_NAMES = {
     'DISCOVER': 'Khám Phá'
 };
 
+const adminPathMap = {
+    'EXPERIENCE': 'trai-nghiem',
+    'DINING': 'am-thuc',
+    'DISCOVER': 'kham-pha'
+};
+
 const ServiceForm = ({ pageType }) => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -84,7 +90,6 @@ useEffect(() => {
           console.error("Lỗi fetch detail:", error);
           if (error.response?.status === 401) {
             showError("Phiên đăng nhập hết hạn, vui lòng đăng nhập lại.");
-            // navigate('/hotel/admin/login'); // Có thể chuyển hướng về trang login
           } else {
             showError("Lỗi khi tải dữ liệu dịch vụ");
           }
@@ -191,7 +196,8 @@ useEffect(() => {
 
         await axios({ method, url, data: payload, headers: { Authorization: `Bearer ${token}` } });
         showSuccess("Lưu dữ liệu thành công!");
-        navigate(`/hotel/admin/${pageType.toLowerCase()}`);
+        const targetPath = adminPathMap[pageType] || pageType.toLowerCase();
+        navigate(`/hotel/admin/${targetPath}`);
     } catch (error) {
         showError("Lỗi: " + (error.response?.data?.message || error.message));
     } finally { setLoading(false); }
@@ -213,7 +219,10 @@ useEffect(() => {
                 </div>
             )}
 
-            <button onClick={() => navigate(`/hotel/admin/${pageType.toLowerCase()}`)} className="flex items-center gap-2 text-neutral-500 hover:text-black mb-6 text-sm font-medium">
+            <button onClick={() => {
+                const targetPath = adminPathMap[pageType] || pageType.toLowerCase();
+                navigate(`/hotel/admin/${targetPath}`);
+            }} className="flex items-center gap-2 text-neutral-500 hover:text-black mb-6 text-sm font-medium">
                 <ArrowLeft size={16} /> Quay lại danh sách
             </button>
 

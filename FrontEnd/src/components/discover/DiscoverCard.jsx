@@ -4,11 +4,11 @@ const DiscoverCard = ({ data }) => {
   return (
     <div className="group cursor-pointer flex flex-col gap-4 h-full">
       {/* 1. Image Container (Zoom Effect) */}
-      <div className="overflow-hidden w-full aspect-[4/5] relative">
+      <div className="overflow-hidden w-full aspect-4/5 relative">
         <img
           src={data.image}
           alt={data.title}
-          className="w-full h-full object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-1500 ease-out group-hover:scale-110"
         />
       </div>
 

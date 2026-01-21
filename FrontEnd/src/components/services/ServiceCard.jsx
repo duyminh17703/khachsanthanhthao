@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const ServiceCard = ({ data }) => {
-  const detailLink = `/experience/${data.slug}`;
+  const detailLink = `/trai-nghiem/${data.slug}`;
 
   return (
     <div className="w-full mb-20 last:mb-0 group">
@@ -36,7 +36,7 @@ const ServiceCard = ({ data }) => {
         <img
           src={data.image}
           alt={data.title}
-          className="w-full h-full object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-1500 ease-out group-hover:scale-105"
         />
         {/* Lớp phủ nhẹ khi hover */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500"></div>

@@ -43,7 +43,7 @@ const RoomCard = ({ data, isActive }) => {
           </p>
 
           <h3 className="font-semibold text-xl italic tracking-[0.05em] text-stone-800 uppercase mb-4 min-h-14 flex items-center justify-center leading-tight">
-            <Link to={`/room/${slug}`} className=" font-playfair hover:text-stone-600 transition-colors">
+            <Link to={`/danh-sach-phong/${slug}`} className=" font-playfair hover:text-stone-600 transition-colors">
               {title}
             </Link>
           </h3>
@@ -68,7 +68,7 @@ const RoomCard = ({ data, isActive }) => {
 
             {/* 3. Thay button bằng Link */}
             <Link 
-              to={`/rooms/${slug}`} 
+              to={`/danh-sach-phong/${slug}`} 
               className="
                 group
                 inline-block

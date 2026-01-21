@@ -25,7 +25,7 @@ const RoomPage = () => {
     const fetchRooms = async () => {
       try {
         const API_URL = import.meta.env.VITE_API_URL;
-        const response = await axios.get(`${API_URL}/api/v1/rooms/list-rooms`);
+        const response = await axios.get(`${API_URL}/api/v1/rooms`);
         if (response.data.success) {
           setRooms(response.data.data);
         }

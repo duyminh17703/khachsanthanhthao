@@ -64,7 +64,7 @@ const NavArrow = ({ direction, onClick, isHidden }) => {
 const FoodCard = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const detailLink = `/dining/${data.slug}`;
+  const detailLink = `/am-thuc/${data.slug}`;
 
   const swipeHandlers = useSwipeLogic(
     () => setIsOpen(false), // Vuốt trái -> Đóng
@@ -72,7 +72,7 @@ const FoodCard = ({ data }) => {
   );
 
   return (
-    <div className="relative w-full h-[100vh] min-h-[600px] bg-stone-50 border-b border-stone-200 overflow-hidden select-none group">
+    <div className="relative w-full h-screen min-h-[600px] bg-stone-50 border-b border-stone-200 overflow-hidden select-none group">
       
       {/* ================= LAYER 1: NỘI DUNG VĂN BẢN ================= */}
       <div className="absolute inset-0 flex w-full h-full">
@@ -114,7 +114,7 @@ const FoodCard = ({ data }) => {
               {data.title}
            </h2>
            
-           <div className="w-full h-[2px] bg-stone-300 mb-8"></div>
+           <div className="w-full h-0.5 bg-stone-300 mb-8"></div>
 
            <p className="italic text-lg text-stone-500 mb-10 leading-relaxed max-w-md">
               {data.highlight}
@@ -150,7 +150,7 @@ const FoodCard = ({ data }) => {
         className={`
             absolute top-0 bottom-0 w-1/2 z-20 shadow-[0_0_80px_rgba(0,0,0,0.2)] 
             cursor-grab active:cursor-grabbing touch-pan-y
-            transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]
+            transition-transform duration-900 ease-[cubic-bezier(0.22,1,0.36,1)]
             ${isOpen ? "translate-x-full" : "translate-x-0"} 
         `}
       >
@@ -173,7 +173,7 @@ const FoodCard = ({ data }) => {
                     draggable={false} 
                     className="w-full h-full object-cover select-none brightness-90"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/10"></div>
+                <div className="absolute inset-0 bg-linear-to-t from-black/20 via-transparent to-black/10"></div>
               </div>
             </SwiperSlide>
           ))}

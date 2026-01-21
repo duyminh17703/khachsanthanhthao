@@ -20,7 +20,7 @@ const RoomManager = () => {
     try {
       // Gọi API với query params
       const API_URL = import.meta.env.VITE_API_URL;
-      const response = await axios.get(`${API_URL}/api/v1/rooms/list-rooms`, {
+      const response = await axios.get(`${API_URL}/api/v1/rooms`, {
         params: {
           type: filterType,
           search: searchTerm
@@ -102,7 +102,7 @@ const RoomManager = () => {
 
         {/* Right: Add Button */}
         <button 
-            onClick={() => navigate('/hotel/admin/rooms/add')}
+            onClick={() => navigate('/hotel/admin/phong/them')}
             className="w-full md:w-auto flex justify-center items-center gap-2 bg-black text-white px-6 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-neutral-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
         >
             <Plus size={16} weight="bold" />
@@ -165,7 +165,7 @@ const RoomManager = () => {
                                 <td className="p-4 text-right">
                                     <div className="flex items-center justify-end gap-2">
                                         <button 
-                                            onClick={() => navigate(`/hotel/admin/rooms/edit/${room._id}`)}
+                                            onClick={() => navigate(`/hotel/admin/phong/sua/${room._id}`)}
                                             className="p-2 text-neutral-500 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors" title="Sửa"
                                         >
                                             <Pencil size={18} />

@@ -326,7 +326,7 @@ const RoomDetails = () => {
     };
 
     setShowBooking(false);
-    navigate('/checkout', { state: { directBooking: directItem } });
+    navigate('/thanh-toan', { state: { directBooking: directItem } });
   };
 
   if (loading) return <div className="h-screen flex items-center justify-center text-xs font-bold tracking-widest uppercase animate-pulse">Đang tải dữ liệu...</div>;

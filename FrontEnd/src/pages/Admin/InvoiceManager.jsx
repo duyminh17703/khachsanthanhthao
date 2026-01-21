@@ -174,7 +174,7 @@ const InvoiceManager = () => { // Đổi tên component cho khớp file (Booking
                                 {/* 7. THAO TÁC */}
                                 <td className="p-4 text-right">
                                     <button 
-                                        onClick={() => navigate(`/hotel/admin/invoices/${item.booking_code}`)} 
+                                        onClick={() => navigate(`/hotel/admin/hoa-don/${item.booking_code}`)} 
                                         className="p-2 text-neutral-400 cursor-pointer hover:text-black hover:bg-neutral-100 rounded-full transition-all" 
                                         title="Xem chi tiết"
                                     >

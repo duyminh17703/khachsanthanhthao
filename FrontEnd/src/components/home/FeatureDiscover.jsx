@@ -42,7 +42,7 @@ const FeaturedDiscover = () => {
         {/* Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-12">
           {discovers.map((item) => (
-            <Link key={item._id} to={`/discover/${item.slug}`} className="block h-full">
+            <Link key={item._id} to={`/kham-pha/${item.slug}`} className="block h-full">
               <DiscoverCard 
                 data={{
                   // Map dữ liệu từ MongoDB sang Props của Card
@@ -65,7 +65,7 @@ const FeaturedDiscover = () => {
 
         {/* Footer: Button Centered */}
         <div className="flex justify-center mt-16">
-          <Link to="/discover">
+          <Link to="/kham-pha">
             <button className="bg-black text-white text-[11px] font-bold uppercase tracking-[0.2em] px-10 py-4 hover:bg-neutral-800 transition-colors cursor-pointer duration-300">
               Khám phá thêm
             </button>

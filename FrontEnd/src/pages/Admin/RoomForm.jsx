@@ -51,7 +51,7 @@ const RoomForm = () => {
       const fetchRoom = async () => {
         try {
           const API_URL = import.meta.env.VITE_API_URL;
-          const res = await axios.get(`${API_URL}/api/v1/rooms/list-rooms`); 
+          const res = await axios.get(`${API_URL}/api/v1/rooms`); 
           const roomToEdit = res.data.data.find(r => r._id === id);
           if (roomToEdit) {
              setFormData({
@@ -166,7 +166,7 @@ const RoomForm = () => {
         const payload = isEditMode ? { ...formData, id } : formData;
         await axios({ method, url, data: payload, headers: { Authorization: `Bearer ${token}` } });
         showSuccess("Lưu thành công!");
-        navigate('/hotel/admin/rooms');
+        navigate('/hotel/admin/phong');
     } catch (error) {
         showError("Lỗi: " + (error.response?.data?.message || error.message));
     } finally {
@@ -189,7 +189,7 @@ const RoomForm = () => {
                 </div>
             )}
 
-            <button onClick={() => navigate('/hotel/admin/rooms')} className="flex items-center gap-2 text-neutral-500 hover:text-black mb-6 text-sm font-medium">
+            <button onClick={() => navigate('/hotel/admin/phong')} className="flex items-center gap-2 text-neutral-500 hover:text-black mb-6 text-sm font-medium">
                 <ArrowLeft size={16} /> Quay lại danh sách
             </button>
 

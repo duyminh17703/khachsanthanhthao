@@ -185,9 +185,9 @@ const ServiceDetails = () => {
   };
 
   const getContext = () => {
-    if (location.pathname.includes('/dining')) return { label: 'ẨM THỰC', backLink: '/dining', backText: 'Quay lại Ẩm thực' };
-    if (location.pathname.includes('/discover')) return { label: 'KHÁM PHÁ', backLink: '/discover', backText: 'Quay lại Khám phá' };
-    return { label: 'TRẢI NGHIỆM', backLink: '/experience', backText: 'Quay lại Trải nghiệm' };
+    if (location.pathname.includes('/am-thuc')) return { label: 'ẨM THỰC', backLink: '/am-thuc', backText: 'Quay lại Ẩm thực' };
+    if (location.pathname.includes('/kham-pha')) return { label: 'KHÁM PHÁ', backLink: '/kham-pha', backText: 'Quay lại Khám phá' };
+    return { label: 'TRẢI NGHIỆM', backLink: '/trai-nghiem', backText: 'Quay lại Trải nghiệm' };
   };
   const context = getContext();
 

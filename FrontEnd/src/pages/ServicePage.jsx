@@ -22,7 +22,7 @@ export const PAGE_CONFIGS = {
     title: 'TRẢI NGHIỆM ĐẲNG CẤP',
     subtitle: 'Wellness & Activities',
     description: 'Cùng người ấy tái tạo năng lượng với các liệu pháp Spa chuyên sâu, phòng Gym hiện đại và các hoạt động văn hóa giải trí độc đáo.',
-    baseLink: '/experience',
+    baseLink: '/trai-nghiem',
     heroImage: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=2070&auto=format&fit=crop',
     icon: <Sparkle size={32} />,
     categories: {
@@ -35,7 +35,7 @@ export const PAGE_CONFIGS = {
     title: 'KHÁM PHÁ ĐÀ LẠT',
     subtitle: 'Local Tours & Nature',
     description: 'Đà Lạt không chỉ có hoa và tình yêu. Hãy cùng người ấy len lỏi vào những cánh rừng thông, những đồi chè cổ và những di sản kiến trúc Pháp vượt thời gian.',
-    baseLink: '/discover',
+    baseLink: '/kham-pha',
     heroImage: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1948&auto=format&fit=crop',
     icon: <Compass size={32} />,
     categories: {
@@ -48,7 +48,7 @@ export const PAGE_CONFIGS = {
     title: 'ẨM THỰC TINH HOA',
     subtitle: 'Restaurants & Bars',
     description: 'Con đường nhanh nhất dẫn đến trái tim đàn ông là đường dạ dày. Hãy cùng người ấy trải nghiệm hành trình vị giác đa tầng, từ bữa sáng tinh khôi bên hồ, trà chiều lãng mạn đến bữa tối Fine Dining dưới ánh nến lung linh.',
-    baseLink: '/dining',
+    baseLink: '/am-thuc',
     heroImage: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=2070&auto=format&fit=crop',
     icon: <ForkKnife size={32} />,
     categories: {

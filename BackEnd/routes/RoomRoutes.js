@@ -103,7 +103,7 @@ roomRouter.delete('/delete-room', verifyToken, async (req, res) => {
 });
 
 // API Lấy danh sách phòng
-roomRouter.get('/list-rooms', async (req, res) => {
+roomRouter.get('/', async (req, res) => {
     try {
         // 1. Lấy tham số từ URL (Frontend gửi lên)
         const { type, search } = req.query;

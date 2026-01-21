@@ -126,7 +126,7 @@ const OfferPage = () => {
                                         </div>
 
                                         <h3 className="text-2xl lg:text-3xl font-playfair font-bold text-neutral-900 mb-4 group-hover:text-amber-800 transition-colors">
-                                            <Link to={`/offers/${offer.slug}`}>{offer.title}</Link>
+                                            <Link to={`/uu-dai/${offer.slug}`}>{offer.title}</Link>
                                         </h3>
 
                                         <p className="text-neutral-500 font-light text-sm leading-relaxed mb-8 line-clamp-3">

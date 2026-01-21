@@ -39,7 +39,7 @@ const Hero = () => {
       </div>
 
       {/* Overlay làm tối để chữ nổi */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/40 to-black/10 pointer-events-none" />
+      <div className="absolute inset-0 z-10 bg-linear-to-t from-black/80 via-black/40 to-black/10 pointer-events-none" />
 
       {/* Nội dung chữ góc trái dưới */}
       <div className="relative z-20 flex items-end h-full">

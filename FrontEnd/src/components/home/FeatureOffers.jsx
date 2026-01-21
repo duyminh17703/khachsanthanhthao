@@ -37,7 +37,7 @@ const FeatureOffers = () => {
           </h2>
           
           <Link 
-            to="/offers" 
+            to="/uu-dai" 
             className="text-[13px] tracking-[0.2em] uppercase text-neutral-500 hover:text-neutral-900 border-b border-neutral-300 hover:border-neutral-900 pb-1 transition-all duration-300"
           >
             Tất cả ưu đãi
@@ -46,7 +46,7 @@ const FeatureOffers = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {offers.map((offer) => (
-            <Link key={offer._id} to={`/offers/${offer.slug}`} className="block">
+            <Link key={offer._id} to={`/uu-dai/${offer.slug}`} className="block">
               <OfferCard 
                 data={{
                   title: offer.title,

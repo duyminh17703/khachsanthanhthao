@@ -23,6 +23,12 @@ const PAGE_NAMES = {
     'DISCOVER': 'Khám Phá'
 };
 
+const adminPathMap = {
+    'EXPERIENCE': 'trai-nghiem',
+    'DINING': 'am-thuc',
+    'DISCOVER': 'kham-pha'
+};
+
 const ServiceManager = ({ pageType }) => {
   const navigate = useNavigate();
   const [services, setServices] = useState([]);
@@ -128,7 +134,10 @@ const ServiceManager = ({ pageType }) => {
 
         {/* Add Button */}
         <button 
-            onClick={() => navigate(`${basePath}/add`)}
+            onClick={() => {
+                const targetPath = adminPathMap[pageType] || pageType.toLowerCase();
+                navigate(`/hotel/admin/${targetPath}/them`);
+            }}
             className="w-full md:w-auto flex justify-center items-center gap-2 bg-black text-white px-6 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-neutral-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
         >
             <Plus size={16} weight="bold" />
@@ -189,7 +198,10 @@ const ServiceManager = ({ pageType }) => {
                                 <td className="p-4 text-right">
                                     <div className="flex items-center justify-end gap-2">
                                         <button 
-                                            onClick={() => navigate(`${basePath}/edit/${svc._id}`)}
+                                            onClick={() => {
+                                                const targetPath = adminPathMap[pageType] || pageType.toLowerCase();
+                                                navigate(`/hotel/admin/${targetPath}/sua/${svc._id}`);
+                                            }}
                                             className="p-2 text-neutral-500 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
                                             title="Chỉnh sửa"
                                         >

@@ -37,68 +37,70 @@ const App = () => {
         <Routes>
           {/* ... Client Routes ... */}
           <Route path='/' element={<Home />} />
-          <Route path='/list-rooms' element={<RoomPage />} />
-          <Route path='rooms/:slug' element={<RoomDetails />} />
-          <Route path='/checkout' element={<CheckoutPage />} />
+          <Route path='/danh-sach-phong' element={<RoomPage />} />
+          <Route path='/danh-sach-phong/:slug' element={<RoomDetails />} />
+          <Route path='/thanh-toan' element={<CheckoutPage />} />
           <Route path="/checkout-success" element={<CheckoutSuccess />} />
           <Route path="/checkout-fail" element={<CheckoutFail />} />
-          <Route path='/offers' element={<OfferPage />} />
-          <Route path='/offers/:slug' element={<OfferDetails />} />
-          <Route path="/experience" element={<ServiceListingPage serviceType="EXPERIENCE" />} />
-          <Route path="/dining" element={<ServiceListingPage serviceType="DINING" />} />
-          <Route path="/discover" element={<ServiceListingPage serviceType="DISCOVER" />} />
-          <Route path='/:serviceType/:slug' element={<ServiceDetails />} />
-          <Route path='/find' element={<FindPage />} />
-          <Route path='/contact' element={<ContactPage />} />
+          <Route path='/uu-dai' element={<OfferPage />} />
+          <Route path='/uu-dai/:slug' element={<OfferDetails />} />
+          <Route path="/trai-nghiem" element={<ServiceListingPage serviceType="EXPERIENCE" />} />
+          <Route path="/am-thuc" element={<ServiceListingPage serviceType="DINING" />} />
+          <Route path="/kham-pha" element={<ServiceListingPage serviceType="DISCOVER" />} />
+          <Route path="/trai-nghiem/:slug" element={<ServiceDetails />} />
+          <Route path="/kham-pha/:slug" element={<ServiceDetails />} />
+          <Route path="/am-thuc/:slug" element={<ServiceDetails />} />
+          <Route path='/tim-kiem' element={<FindPage />} />
+          <Route path='/lien-he' element={<ContactPage />} />
           
           {/* ... Admin Routes ... */}
           <Route path='/hotel/admin' element={<AdminLogin />} />
           <Route path='/hotel/admin/dashboard' element={<Dashboard />} />
-          <Route path='/hotel/admin/rooms' element={<RoomManager />} />
-          <Route path='/hotel/admin/rooms/add' element={<RoomForm />} />
-          <Route path='/hotel/admin/rooms/edit/:id' element={<RoomForm />} />
-          <Route path='/hotel/admin/invoices' element={<InvoiceManager />} />
-          <Route path='/hotel/admin/invoices/:code' element={<InvoiceDetails />} />
+          <Route path='/hotel/admin/phong' element={<RoomManager />} />
+          <Route path='/hotel/admin/phong/them' element={<RoomForm />} />
+          <Route path='/hotel/admin/phong/sua/:id' element={<RoomForm />} />
+          <Route path='/hotel/admin/hoa-don' element={<InvoiceManager />} />
+          <Route path='/hotel/admin/hoa-don/:code' element={<InvoiceDetails />} />
           <Route 
-              path="/hotel/admin/experience" 
+              path="/hotel/admin/trai-nghiem" 
               element={<ServiceManager pageType="EXPERIENCE" />} 
           />
           <Route 
-              path="/hotel/admin/experience/add" 
+              path="/hotel/admin/trai-nghiem/them" 
               element={<ServiceForm pageType="EXPERIENCE" />} 
           />
           <Route 
-              path="/hotel/admin/experience/edit/:id" 
+              path="/hotel/admin/trai-nghiem/sua/:id" 
               element={<ServiceForm pageType="EXPERIENCE" />} 
           />
           <Route 
-              path="/hotel/admin/dining" 
+              path="/hotel/admin/am-thuc" 
               element={<ServiceManager pageType="DINING" />} 
           />
           <Route 
-              path="/hotel/admin/dining/add" 
+              path="/hotel/admin/am-thuc/them" 
               element={<ServiceForm pageType="DINING" />} 
           />
           <Route 
-              path="/hotel/admin/dining/edit/:id" 
+              path="/hotel/admin/am-thuc/sua/:id" 
               element={<ServiceForm pageType="DINING" />} 
           />
           <Route 
-              path="/hotel/admin/discover" 
+              path="/hotel/admin/kham-pha" 
               element={<ServiceManager pageType="DISCOVER" />} 
           />
           <Route 
-              path="/hotel/admin/discover/add" 
+              path="/hotel/admin/kham-pha/them" 
               element={<ServiceForm pageType="DISCOVER" />} 
           />
           <Route 
-              path="/hotel/admin/discover/edit/:id" 
+              path="/hotel/admin/kham-pha/sua/:id" 
               element={<ServiceForm pageType="DISCOVER" />} 
           />
-          <Route path='/hotel/admin/offers' element={<OfferManager />} />
-          <Route path='/hotel/admin/offers/add' element={<OfferForm />} />
-          <Route path='/hotel/admin/offers/edit/:id' element={<OfferForm />} />
-          <Route path="/hotel/admin/employees" element={<EmployeeManager />} />
+          <Route path='/hotel/admin/uu-dai' element={<OfferManager />} />
+          <Route path='/hotel/admin/uu-dai/them' element={<OfferForm />} />
+          <Route path='/hotel/admin/uu-dai/sua/:id' element={<OfferForm />} />
+          <Route path="/hotel/admin/nhan-vien" element={<EmployeeManager />} />
         </Routes>
     </CartProvider>
   )

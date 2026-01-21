@@ -30,7 +30,7 @@ const AdminLogin = () => {
         // 3. Lưu vào LocalStorage để dùng cho toàn bộ trang Admin
         localStorage.setItem('admin_token', token); 
         localStorage.setItem('user_level', level);     
-        navigate('/hotel/admin/dashboard'); 
+        navigate('/hotel/admin/hoa-don'); 
       }
     } catch (err) {
       // Xử lý lỗi trả về từ Backend (VD: Sai pass, user không tồn tại)
