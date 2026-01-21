@@ -1,0 +1,68 @@
+{
+  "title": "One-Bedroom Villa",
+  "hero": {
+    "image": "https://www.fourseasons.com/alt/img-opt/~65.1701.0,0000-178,5001-3000,0000-1687,4999/publish/content/dam/fourseasons/images/web/NMH/NMH_1478_original.jpg",
+    "subtitle": "Filled with natural light, these refurbished villas..."
+  },
+  "gallery": [
+    "https://www.fourseasons.com/alt/img-opt/~80.3060.0,0000-136,2500-3000,0000-1687,5000/publish/content/dam/fourseasons/images/web/NMH/NMH_1477_original.jpg",
+    "https://www.fourseasons.com/alt/img-opt/~80.3060.0,0000-105,2500-3000,0000-1687,5000/publish/content/dam/fourseasons/images/web/NMH/NMH_1479_original.jpg",
+    "https://www.fourseasons.com/alt/img-opt/~80.3060.0,0000-158,3553-3000,0000-1687,5000/publish/content/dam/fourseasons/images/web/NMH/NMH_1481_original.jpg"
+  ],
+  "roomType": "LUXURY",
+  "details": {
+    "beds": [
+      "One king bed (two twin beds available on request)",
+      "One sofabed"
+    ],
+    "occupancy": [
+      "3 adults, or 2 adults and 1 child"
+    ],
+    "size": [
+      "87 m2 (937 sq.ft.)",
+      "Ground floor"
+    ],
+    "bathroom": [
+      "One full bathroom with shower, bathtub and outdoor rain shower"
+    ],
+    "views": [
+      "Garden"
+    ],
+    "unique_features": [
+      "Renovated villa",
+      "Indoor lounge area",
+      "Garden view",
+      "Outdoor rain shower",
+      "Daybeds on the outdoor terrace"
+    ],
+    "floor_plan_image": "https://www.fourseasons.com/alt/img-opt/~80.3060.0,0000-136,2500-3000,0000-1687,5000/publish/content/dam/fourseasons/images/web/NMH/NMH_floorplan_example.jpg"
+  },
+  "amenities": [
+    {
+      "group_name": "VILLA HIGHLIGHTS",
+      "items": [
+        "Refrigerated private bar",
+        "Tea/Coffee maker",
+        "Flat-screen TV",
+        "Outdoor rain shower"
+      ]
+    },
+    {
+      "group_name": "BED & BATH",
+      "items": [
+        "Down duvets and pillows",
+        "Thick terry bathrobes",
+        "Double vanities",
+        "Hair dryer"
+      ]
+    },
+    {
+      "group_name": "SERVICES & AMENITIES",
+      "items": [
+        "Complimentary standard Wi-Fi",
+        "Twice-daily housekeeping service"
+      ]
+    }
+  ],
+  "base_price": 12500000
+}

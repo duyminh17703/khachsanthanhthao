@@ -1,0 +1,14 @@
+import mongoose from "mongoose";
+
+const AdminSchema = new mongoose.Schema({
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  level: {
+    type: String,
+    enum: ['ADMIN', 'EMPLOYEE'],
+    default: 'EMPLOYEE',
+    required: true
+  }
+});
+
+export default mongoose.model("Admin", AdminSchema);
