@@ -14,7 +14,7 @@ const RoomCard = ({ data, isActive }) => {
     <div
       className={`
         relative w-full md:w-[350px] transition-all duration-800ms ease-[cubic-bezier(0.25,1,0.5,1)]
-        ${isActive ? "scale-100 opacity-100 z-10" : "scale-95 opacity-70 grayscale-[25%] z-0"}
+        ${isActive ? "scale-100 opacity-100 z-10" : "scale-95 opacity-70 grayscale-25 z-0"}
       `}
     >
       <div

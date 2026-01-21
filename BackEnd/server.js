@@ -14,24 +14,24 @@ connectDB();
 
 const app = express();
 const allowedOrigins = [
-  'http://localhost:5173',                  // Cho phép chạy local (Vite thường dùng cổng 5173)
-  'http://localhost:3000',                  // Cho phép chạy local (React Create App thường dùng cổng 3000)
-  'https://khachsanthanhthao.top',          // Tên miền chính thức của bạn
-  'https://www.khachsanthanhthao.top'       // Tên miền có www
-  // Sau này khi deploy frontend lên Vercel, bạn sẽ có thêm 1 link dạng 
-  // 'https://khach-san-project.vercel.app', hãy nhớ quay lại đây thêm vào nhé.
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://khachsanthanhthao.top',
+  'https://www.khachsanthanhthao.top'
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Cho phép các request không có origin (như Postman hoặc mobile app)
+    // Cho phép request không có origin (như Postman, App Mobile)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'Lỗi CORS: Origin này không được phép truy cập.';
-      return callback(new Error(msg), false);
+    // Kiểm tra: Nếu nằm trong danh sách HOẶC là domain con của vercel.app
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
+      return callback(null, true);
     }
-    return callback(null, true);
+    
+    const msg = 'Lỗi CORS: Origin này không được phép truy cập.';
+    return callback(new Error(msg), false);
   },
   credentials: true 
 }));
