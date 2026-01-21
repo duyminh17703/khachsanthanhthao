@@ -26,7 +26,7 @@ const RoomCard = ({ data, isActive }) => {
         `}
       >
         {/* Ảnh - Cũng bọc Link để click vào ảnh là chuyển trang luôn (UX tốt hơn) */}
-        <Link to={`/rooms/${slug}`} className="block overflow-hidden relative h-[260px] cursor-pointer">
+        <Link to={`/danh-sach-phong/${slug}`} className="block overflow-hidden relative h-[260px] cursor-pointer">
           <img
             src={image}
             alt={title}
