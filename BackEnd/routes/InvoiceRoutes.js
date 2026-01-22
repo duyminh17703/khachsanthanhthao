@@ -71,26 +71,27 @@ invoiceRouter.post('/create', async (req, res) => {
 });
 
 // --- 2. HÀM TẠO URL VNPAY (ĐÃ SỬA LỖI SIGNATURE) ---
+// --- 2. HÀM TẠO URL VNPAY (ĐÃ FIX TIMEZONE & FORMAT) ---
 function createPaymentUrl(req, invoice) {
+    // 1. Lấy ngày giờ theo múi giờ Việt Nam (UTC+7)
+    // Render server chạy UTC nên cần cộng offset hoặc dùng thư viện. 
+    // Cách an toàn nhất không cần cài thêm moment-timezone:
     let date = new Date();
-    let createDate = moment(date).format('YYYYMMDDHHmmss');
-    
-    let ipAddr = req.headers['x-forwarded-for'] ||
-        req.connection.remoteAddress ||
-        req.socket.remoteAddress ||
-        req.connection.socket.remoteAddress;
-    
-    if (ipAddr === '::1') {
-        ipAddr = '127.0.0.1'; 
-    }
+    // Tạo chuỗi ngày giờ format YYYYMMDDHHmmss chuẩn GMT+7
+    let createDate = moment(date).utcOffset(7).format('YYYYMMDDHHmmss');
+
+    // 2. Cố định IP để tránh lỗi trên Render
+    let ipAddr = '127.0.0.1'; 
 
     let tmnCode = process.env.VNP_TMN_CODE;
     let secretKey = process.env.VNP_HASH_SECRET;
     let vnpUrl = process.env.VNP_URL;
     let returnUrl = process.env.VNP_RETURN_URL;
     let orderId = invoice.booking_code;
-    let amount = invoice.final_total;
     
+    // 3. Đảm bảo số tiền là số nguyên (Integer)
+    let amount = Math.floor(invoice.final_total); 
+
     let vnp_Params = {};
     vnp_Params['vnp_Version'] = '2.1.0';
     vnp_Params['vnp_Command'] = 'pay';
@@ -98,42 +99,46 @@ function createPaymentUrl(req, invoice) {
     vnp_Params['vnp_Locale'] = 'vn';
     vnp_Params['vnp_CurrCode'] = 'VND';
     vnp_Params['vnp_TxnRef'] = orderId;
-    vnp_Params['vnp_OrderInfo'] = 'Thanh toan don hang ' + orderId; // Rút gọn nội dung cho an toàn
+    vnp_Params['vnp_OrderInfo'] = 'Thanh toan don ' + orderId;
     vnp_Params['vnp_OrderType'] = 'other';
-    vnp_Params['vnp_Amount'] = amount * 100;
+    vnp_Params['vnp_Amount'] = amount * 100; // VNPAY tính đơn vị là hào/xu
     vnp_Params['vnp_ReturnUrl'] = returnUrl;
     vnp_Params['vnp_IpAddr'] = ipAddr;
     vnp_Params['vnp_CreateDate'] = createDate;
 
-    // Sắp xếp tham số
+    // 4. Sắp xếp tham số (Quan trọng để tạo chữ ký đúng)
     vnp_Params = sortObject(vnp_Params);
 
-    let signData = ""; 
-    let i = 0;
-    for (let key in vnp_Params) {
-        if (i === 1) { signData += "&"; }
-        signData += key + "=" + vnp_Params[key];
-        i = 1;
-    }
-
+    // 5. Tạo chuỗi query (Dùng thư viện qs hoặc querystring có sẵn của Node)
+    // Lưu ý: VNPAY yêu cầu encodeURIComponent cho value khi tạo chữ ký
+    let signData = querystring.stringify(vnp_Params, { encode: false });
+    
+    // 6. Tạo chữ ký (Checksum)
     let hmac = crypto.createHmac("sha512", secretKey);
-    // [FIX 2] Dùng Buffer.from thay vì new Buffer
+    // Buffer.from xử lý tiếng Việt và ký tự đặc biệt tốt hơn
     let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex"); 
     
-    // [FIX 3 - QUAN TRỌNG NHẤT]
-    // Không dùng qs.stringify nữa. Nối trực tiếp signData vào để đảm bảo đồng nhất.
-    vnpUrl += '?' + signData + '&vnp_SecureHash=' + signed;
+    // 7. Tạo URL cuối cùng
+    vnp_Params['vnp_SecureHash'] = signed;
+    vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
 
     return vnpUrl;
 }
 
-// Hàm sortObject (Giữ nguyên logic chuẩn của VNPay)
+// Hàm sortObject chuẩn (Không encode value bên trong, để querystring tự lo)
 function sortObject(obj) {
     let sorted = {};
-    let keys = Object.keys(obj).sort();
-    keys.forEach((key) => {
-        sorted[key] = encodeURIComponent(obj[key]).replace(/%20/g, "+");
-    });
+    let str = [];
+    let key;
+    for (key in obj){
+        if (obj.hasOwnProperty(key)) {
+        str.push(encodeURIComponent(key));
+        }
+    }
+    str.sort();
+    for (key = 0; key < str.length; key++) {
+        sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
+    }
     return sorted;
 }
 
