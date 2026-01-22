@@ -51,7 +51,7 @@ const POLICIES = [
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { cart, clearCart } = useCart();
+  const { cart} = useCart();
   
   // --- XỬ LÝ DỮ LIỆU ĐẦU VÀO ---
   const directBookingItem = location.state?.directBooking;
@@ -87,7 +87,7 @@ const CheckoutPage = () => {
         if (checkoutItems.length === 0) {
         navigate('/'); 
         }
-    }, [checkoutItems, navigate]);
+    }, []);
 
   // --- HANDLERS ---
   const handleInputChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -232,14 +232,13 @@ const CheckoutPage = () => {
         // Chờ tất cả request hoàn tất
         await Promise.all(promises);
         
-        // --- [QUAN TRỌNG] CHUYỂN HƯỚNG SANG TRANG SUCCESS ---
-        if (!directBookingItem) clearCart();
-        
         if (finalBookingCode) {
-            // Chuyển hướng kèm mã Code để trang Success gọi API hiển thị lại
-            navigate(`/checkout-success?code=${finalBookingCode}&status=success`);
+            navigate(`/checkout-success?code=${finalBookingCode}&status=success`, { 
+                state: { 
+                    shouldClearCart: !directBookingItem // Gửi tín hiệu cần xóa giỏ hàng
+                } 
+            });
         } else {
-            // Fallback nếu không có code (trường hợp hiếm)
             navigate('/');
         }
 

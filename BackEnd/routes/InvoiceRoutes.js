@@ -52,12 +52,15 @@ invoiceRouter.post('/create', async (req, res) => {
             });
         }
         if (payment_method === 'CASH') {
-            try {
-                await sendBookingEmail(newInvoice);
-            } catch (mailError) {
-                console.error("Lỗi gửi mail:", mailError);
-                // Không return lỗi ở đây để tránh làm gián đoạn trải nghiệm khách hàng
-            }
+            // rồi mới bắt đầu quy trình gửi mail ngầm bên dưới.
+            setTimeout(() => {
+                console.log("--> Bắt đầu gửi email ngầm...");
+                sendBookingEmail(newInvoice)
+                    .then(() => console.log("--> Gửi email thành công!"))
+                    .catch((err) => {
+                        console.error("--> LỖI GỬI MAIL:", err.message);
+                    });
+            }, 100); // Chờ 100ms rồi mới chạy gửi mail
         }
 
         res.status(201).json({ success: true, message: "Đặt phòng thành công!", bookingCode: generatedCode });
@@ -137,7 +140,7 @@ function sortObject(obj) {
 // --- 3. API RETURN URL ---
 // TRONG InvoiceRoutes.js
 invoiceRouter.get('/vnpay_return', async (req, res) => {
-    const FRONTEND_URL = "http://localhost:5173"; // Đảm bảo khớp với port React của bạn
+    const FRONTEND_URL = "http://khachsanthanhthao.top"; // Đảm bảo khớp với port React của bạn
     
     try {
         let vnp_Params = req.query;
@@ -417,20 +420,28 @@ invoiceRouter.post('/add-services', async (req, res) => {
 
         invoice.booked_services = [...invoice.booked_services, ...new_services];
         invoice.final_total += additional_total;
+        
+        // Lưu vào database (bước này nhanh, để await được)
         await invoice.save();
 
-        try {
-            await sendBookingEmail(invoice);
-        } catch (mailError) {
-            console.error("Lỗi gửi mail khi thêm dịch vụ:", mailError);
-        }
-
+        // 1. GỬI PHẢN HỒI NGAY LẬP TỨC (Không chờ mail)
         res.json({
             success: true,
             message: "Đã thêm dịch vụ thành công",
             bookingCode: booking_code,
             data: invoice
         });
+
+        // 2. GỬI MAIL NGẦM (Dùng setTimeout để tách luồng)
+        setTimeout(() => {
+            console.log(`--> [Add Service] Bắt đầu gửi email cập nhật cho đơn ${booking_code}...`);
+            sendBookingEmail(invoice)
+                .then(() => console.log(`--> [Add Service] Gửi email thành công!`))
+                .catch((mailError) => {
+                    // Log lỗi chi tiết để bạn biết tại sao mail không đi (sai pass, chặn port...)
+                    console.error("--> [Add Service] LỖI GỬI MAIL:", mailError.message);
+                });
+        }, 100);
 
     } catch (error) {
         console.error("Lỗi thêm dịch vụ:", error);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MainLayout from '../layout/MainLayout';
-import Footer from '../components/Footer';
+import Footer from '../layout/Footer';
 import { 
     MapPin, Phone, Envelope, Clock, PaperPlaneRight, 
     FacebookLogo, InstagramLogo, YoutubeLogo, ChatCircleText, Car,

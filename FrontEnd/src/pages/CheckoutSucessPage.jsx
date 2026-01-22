@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from 'react';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import axios from 'axios';
 import { CheckCircle, HouseLine, Printer, Spinner, WarningCircle, Copy } from '@phosphor-icons/react';
 
@@ -7,9 +8,27 @@ const CheckoutSuccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const bookingCode = searchParams.get('code'); // Lấy mã từ URL
+  const location = useLocation(); // <--- Hook lấy state từ trang trước
+  const { clearCart } = useCart();
+  const processedRef = useRef(false);
   
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
+
+ useEffect(() => {
+      // Chỉ chạy nếu có yêu cầu xóa VÀ chưa từng chạy trước đó
+      if (location.state?.shouldClearCart && !processedRef.current) {
+          processedRef.current = true; // Đánh dấu đã xử lý ngay lập tức
+          
+          // Dùng setTimeout để đẩy việc xóa giỏ hàng ra sau 1 chút
+          // Giúp UI hiển thị mượt mà trước, không bị khựng lại
+          setTimeout(() => {
+              clearCart();
+              // Xóa state của history để F5 không bị lặp lại
+              window.history.replaceState({}, document.title);
+          }, 1000); 
+      }
+  }, [location.state, clearCart]);
 
   // Gọi API lấy chi tiết đơn hàng để hiển thị
   useEffect(() => {
