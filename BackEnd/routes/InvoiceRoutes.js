@@ -140,7 +140,7 @@ function sortObject(obj) {
 // --- 3. API RETURN URL ---
 // TRONG InvoiceRoutes.js
 invoiceRouter.get('/vnpay_return', async (req, res) => {
-    const FRONTEND_URL = "http://khachsanthanhthao.top"; // Đảm bảo khớp với port React của bạn
+    const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
     
     try {
         let vnp_Params = req.query;
@@ -198,7 +198,7 @@ invoiceRouter.get('/vnpay_return', async (req, res) => {
     } catch (error) {
         // TRƯỜNG HỢP CRASH CODE: Luôn đẩy về trang thất bại ở Frontend thay vì hiện lỗi ở Backend
         console.error("Lỗi xử lý vnpay_return:", error);
-        res.redirect(`http://localhost:5173/checkout-fail?error=system`);
+        res.redirect(`${FRONTEND_URL}/checkout-fail?error=system`);
     }
 });
 
