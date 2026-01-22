@@ -80,7 +80,7 @@ invoiceRouter.post('/create', async (req, res) => {
     }
 });
 
-// --- 2. HÀM TẠO URL VNPAY (FIX LỖI CHECKSUM) ---
+// --- 2. HÀM TẠO URL VNPAY (FIX LỖI CHECKSUM ĐÚNG) ---
 function createPaymentUrl(req, invoice) {
     // 1. Lấy ngày giờ theo múi giờ Việt Nam (UTC+7)
     let date = new Date();
@@ -112,37 +112,31 @@ function createPaymentUrl(req, invoice) {
     vnp_Params['vnp_IpAddr'] = ipAddr;
     vnp_Params['vnp_CreateDate'] = createDate;
 
-    // 4. Sắp xếp tham số và tạo chuỗi ký
-    vnp_Params = sortObject(vnp_Params);
-
-    // 5. Tạo chuỗi dữ liệu để ký (CHUẨN VNPAY)
-    let signData = Object.keys(vnp_Params)
-        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(vnp_Params[key]))
-        .join('&');
+    // 4. Tạo chuỗi ký theo VNPAY standard (KEY=VALUE&KEY2=VALUE2, sorted by KEY)
+    // Lấy tất cả key, sort alphabetically
+    let sortedKeys = Object.keys(vnp_Params).sort();
+    console.log(`[VNPay] Sorted keys: ${sortedKeys.join(', ')}`);
     
-    // 6. Tạo chữ ký SHA512
+    // Tạo signData: key1=value1&key2=value2... (KHÔNG encode key, KHÔNG encode value khi tạo hash)
+    let signData = sortedKeys.map(key => key + '=' + vnp_Params[key]).join('&');
+    console.log(`[VNPay] SignData before hash: ${signData.substring(0, 100)}...`);
+    
+    // 5. Tạo chữ ký SHA512 (lấy hex digest)
     let hmac = crypto.createHmac("sha512", secretKey);
-    let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex"); 
+    let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
+    console.log(`[VNPay] Generated hash: ${signed.substring(0, 20)}...`);
     
-    // 7. Tạo URL cuối cùng
+    // 6. Tạo URL query string (CÓ encode khi tạo URL)
     vnp_Params['vnp_SecureHash'] = signed;
-    vnpUrl += '?' + Object.keys(vnp_Params)
+    let queryString = sortedKeys
+        .concat('vnp_SecureHash')
         .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(vnp_Params[key]))
         .join('&');
+    
+    vnpUrl += '?' + queryString;
+    console.log(`[VNPay] Payment URL created for: ${orderId}`);
 
     return vnpUrl;
-}
-
-// Hàm sortObject chuẩn (Chỉ sort key, không encode)
-function sortObject(obj) {
-    let sorted = {};
-    let keys = Object.keys(obj);
-    keys.sort();
-    
-    for (let key of keys) {
-        sorted[key] = obj[key];
-    }
-    return sorted;
 }
 
 invoiceRouter.get('/vnpay_return', async (req, res) => {
@@ -151,32 +145,30 @@ invoiceRouter.get('/vnpay_return', async (req, res) => {
     try {
         let vnp_Params = req.query;
         let secureHash = vnp_Params['vnp_SecureHash'];
+        const bookingCode = vnp_Params['vnp_TxnRef'];
 
-        const bookingCode = vnp_Params['vnp_TxnRef']; // Lấy mã đơn hàng để dùng cho redirect kể cả khi lỗi
+        console.log(`\n🔙 VNPay Return - Booking: ${bookingCode}`);
 
         delete vnp_Params['vnp_SecureHash'];
         delete vnp_Params['vnp_SecureHashType'];
 
-        vnp_Params = sortObject(vnp_Params);
-
         let secretKey = process.env.VNP_HASH_SECRET;
         
-        // Tạo chuỗi ký theo chuẩn VNPAY (Giống như tạo URL)
-        let signData = Object.keys(vnp_Params)
-            .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(vnp_Params[key]))
-            .join('&');
+        // QUAN TRỌNG: Sort keys theo alphabet, tạo signData giống như tạo URL
+        let sortedKeys = Object.keys(vnp_Params).sort();
+        let signData = sortedKeys.map(key => key + '=' + vnp_Params[key]).join('&');
 
         let hmac = crypto.createHmac("sha512", secretKey);
         let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
 
-        console.log("=== VNPAY RETURN DEBUG ===");
-        console.log("SignData:", signData);
-        console.log("Expected Hash:", signed);
-        console.log("Received Hash:", secureHash);
-        console.log("Match:", secureHash === signed);
+        console.log("📋 Params received:", Object.keys(vnp_Params).join(', '));
+        console.log("🔗 SignData:", signData.substring(0, 100) + "...");
+        console.log("✅ Expected hash:", signed.substring(0, 20) + "...");
+        console.log("📝 Received hash:", secureHash.substring(0, 20) + "...");
+        console.log("🔍 Match:", secureHash === signed ? "✅ YES" : "❌ NO");
 
         // KIỂM TRA CHỮ KÝ
-        if(secureHash === signed){
+        if(secureHash === signed) {
             const rspCode = vnp_Params['vnp_ResponseCode'];
 
             if(rspCode === '00') {
