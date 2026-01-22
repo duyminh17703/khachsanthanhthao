@@ -182,7 +182,9 @@ invoiceRouter.get('/vnpay_return', async (req, res) => {
                 );
 
                 if (updatedInvoice) {
-                    try { await sendBookingEmail(updatedInvoice); } catch (e) {}
+                    sendBookingEmail(updatedInvoice)
+                        .then(() => console.log(`--> [VNPay] Đã gửi mail cho đơn: ${bookingCode}`))
+                        .catch(err => console.error(`--> [VNPay] LỖI GỬI MAIL:`, err));
                 }
                 return res.redirect(`${FRONTEND_URL}/checkout-success?code=${bookingCode}&status=success`);
             } else {

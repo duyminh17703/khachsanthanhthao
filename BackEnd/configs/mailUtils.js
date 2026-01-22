@@ -1,11 +1,15 @@
 import nodemailer from 'nodemailer';
 
-// Cấu hình transporter (Sử dụng Gmail làm ví dụ)
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: "smtp.gmail.com",
+    port: 587, // Sử dụng 587 cho TLS (hoặc 465 cho SSL)
+    secure: false, // false cho port 587, true cho port 465
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS  
+    },
+    tls: {
+        rejectUnauthorized: false // Bỏ qua lỗi certificate nếu chạy ở localhost/môi trường dev
     }
 });
 
