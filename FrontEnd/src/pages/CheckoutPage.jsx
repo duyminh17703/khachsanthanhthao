@@ -177,15 +177,22 @@ const CheckoutPage = () => {
             const API_URL = import.meta.env.VITE_API_URL;
             const res = await axios.post(`${API_URL}/api/v1/invoices/create`, bookingPayload);
 
+            if (!res.data.success) {
+                showError("Tạo đơn hàng thất bại: " + (res.data.message || "Vui lòng thử lại"));
+                return;
+            }
+
             // [LOGIC VNPAY]
             if (res.data.isRedirect && res.data.paymentUrl) {
+                console.log("🔄 Chuyển hướng đến VNPay...");
                 window.location.href = res.data.paymentUrl;
                 return; 
             }
             
             // [LẤY MÃ ĐỂ REDIRECT] Nếu là CASH
-            if (res.data.success) {
+            if (res.data.bookingCode) {
                 finalBookingCode = res.data.bookingCode;
+                showSuccess("Tạo đơn hàng thành công! Mã: " + finalBookingCode);
             }
         }
 
