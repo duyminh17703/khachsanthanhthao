@@ -126,74 +126,76 @@ function createPaymentUrl(req, invoice) {
 
 // Hàm sortObject (Giữ nguyên logic chuẩn của VNPay)
 function sortObject(obj) {
-	let sorted = {};
-	let str = [];
-	let key;
-	for (key in obj){
-        // [FIX] Sửa dòng lỗi tại đây:
-		if (Object.prototype.hasOwnProperty.call(obj, key)) {
-		    str.push(encodeURIComponent(key));
-		}
-	}
-	str.sort();
-    for (key = 0; key < str.length; key++) {
-        sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
-    }
+    let sorted = {};
+    let keys = Object.keys(obj).sort();
+    keys.forEach((key) => {
+        sorted[key] = encodeURIComponent(obj[key]).replace(/%20/g, "+");
+    });
     return sorted;
 }
 
-// --- 3. API RETURN URL (CŨNG CẦN SỬA LOGIC CHECK SIGNATURE) ---
+// --- 3. API RETURN URL ---
+// TRONG InvoiceRoutes.js
 invoiceRouter.get('/vnpay_return', async (req, res) => {
-    let vnp_Params = req.query;
-    let secureHash = vnp_Params['vnp_SecureHash'];
+    const FRONTEND_URL = "http://localhost:5173"; // Đảm bảo khớp với port React của bạn
+    
+    try {
+        let vnp_Params = req.query;
+        let secureHash = vnp_Params['vnp_SecureHash'];
 
-    delete vnp_Params['vnp_SecureHash'];
-    delete vnp_Params['vnp_SecureHashType'];
+        const bookingCode = vnp_Params['vnp_TxnRef']; // Lấy mã đơn hàng để dùng cho redirect kể cả khi lỗi
 
-    vnp_Params = sortObject(vnp_Params);
+        delete vnp_Params['vnp_SecureHash'];
+        delete vnp_Params['vnp_SecureHashType'];
 
-    let secretKey = process.env.VNP_HASH_SECRET;
+        vnp_Params = sortObject(vnp_Params);
 
-    let signData = ""; 
-    let i = 0;
-    for (let key in vnp_Params) {
-        if (i === 1) { signData += "&"; }
-        signData += key + "=" + vnp_Params[key];
-        i = 1;
-    }
-
-    let hmac = crypto.createHmac("sha512", secretKey);
-    // [FIX] Cập nhật Buffer.from
-    let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
-
-    if(secureHash === signed){
-        const rspCode = vnp_Params['vnp_ResponseCode'];
-        const bookingCode = vnp_Params['vnp_TxnRef'];
-
-        if(rspCode === '00') {
-            const updatedInvoice = await Invoice.findOneAndUpdate(
-                { booking_code: bookingCode },
-                { 
-                    status: 'ĐÃ THANH TOÁN-CHỜ CHECKIN', 
-                    is_paid: true,
-                    transaction_ref: vnp_Params['vnp_TransactionNo']
-                },
-                { new: true }
-            );
-
-            if (updatedInvoice) {
-                try {
-                    await sendBookingEmail(updatedInvoice);
-                } catch (mailError) {
-                    console.error("Lỗi gửi mail VNPAY:", mailError);
-                }
-            }
-            res.redirect(`http://localhost:5173/checkout-success?code=${bookingCode}&status=success`);
-        } else {
-            res.redirect(`http://localhost:5173/checkout-fail?code=${bookingCode}`);
+        let secretKey = process.env.VNP_HASH_SECRET;
+        let signData = ""; 
+        let i = 0;
+        for (let key in vnp_Params) {
+            if (i === 1) { signData += "&"; }
+            signData += key + "=" + vnp_Params[key];
+            i = 1;
         }
-    } else {
-        res.status(200).json({RspCode: '97', Message: 'Checksum failed'})
+
+        let hmac = crypto.createHmac("sha512", secretKey);
+        let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
+
+        // KIỂM TRA CHỮ KÝ
+        if(secureHash === signed){
+            const rspCode = vnp_Params['vnp_ResponseCode'];
+
+            if(rspCode === '00') {
+                // THÀNH CÔNG: Cập nhật DB và gửi mail
+                const updatedInvoice = await Invoice.findOneAndUpdate(
+                    { booking_code: bookingCode },
+                    { 
+                        status: 'ĐÃ THANH TOÁN-CHỜ CHECKIN', 
+                        is_paid: true,
+                        transaction_ref: vnp_Params['vnp_TransactionNo']
+                    },
+                    { new: true }
+                );
+
+                if (updatedInvoice) {
+                    try { await sendBookingEmail(updatedInvoice); } catch (e) {}
+                }
+                return res.redirect(`${FRONTEND_URL}/checkout-success?code=${bookingCode}&status=success`);
+            } else {
+                // KHÁCH HỦY (ResponseCode thường là 24) HOẶC LỖI THẺ
+                console.log(`Thanh toán không thành công, mã lỗi: ${rspCode}`);
+                return res.redirect(`${FRONTEND_URL}/checkout-fail?code=${bookingCode}&error=cancel`);
+            }
+        } else {
+            // SAI CHỮ KÝ
+            console.error("Checksum failed!");
+            return res.redirect(`${FRONTEND_URL}/checkout-fail?code=${bookingCode}&error=checksum`);
+        }
+    } catch (error) {
+        // TRƯỜNG HỢP CRASH CODE: Luôn đẩy về trang thất bại ở Frontend thay vì hiện lỗi ở Backend
+        console.error("Lỗi xử lý vnpay_return:", error);
+        res.redirect(`http://localhost:5173/checkout-fail?error=system`);
     }
 });
 

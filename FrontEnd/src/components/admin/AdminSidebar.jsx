@@ -19,24 +19,26 @@ const AdminSidebar = ({ isOpen, onClose, isCollapsed, toggleCollapse }) => {
   // [MỚI] Gọi API đếm đơn hàng chờ xác nhận
   useEffect(() => {
     const fetchPendingCount = async () => {
-        try {
-            const token = localStorage.getItem('admin_token'); 
-            if (!token) return;
+      try {
+          const token = localStorage.getItem('admin_token'); 
+          if (!token) return;
 
-            const API_URL = import.meta.env.VITE_API_URL;
-            const res = await axios.get(`${API_URL}/api/v1/invoices/admin/all?status=CHỜ XÁC NHẬN`, {
-                headers: {
-                    Authorization: `Bearer ${token}` 
-                }
-            });
-            
-            if (res.data.success) {
-                setPendingBookings(res.data.data.length);
-            }
-        } catch (error) {
-            console.error("Lỗi tải thông báo :", error);
-        }
-    };
+          const API_URL = import.meta.env.VITE_API_URL;
+          const res = await axios.get(`${API_URL}/api/v1/invoices/admin/all`, {
+              params: { status: 'CHỜ XÁC NHẬN' },
+              headers: {
+                  Authorization: `Bearer ${token}` 
+              }
+          });
+          
+          if (res.data.success) {
+              console.log("Số đơn chờ:", res.data.data.length); // Thêm dòng này để debug
+              setPendingBookings(res.data.data.length);
+          }
+      } catch (error) {
+          console.error("Lỗi tải thông báo :", error);
+      }
+  };
 
     fetchPendingCount();
     
