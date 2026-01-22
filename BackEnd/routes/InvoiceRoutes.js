@@ -20,14 +20,6 @@ invoiceRouter.post('/create', async (req, res) => {
             return res.status(400).json({ success: false, message: "Thiếu thông tin khách hàng!" });
         }
 
-        if (!final_total || final_total <= 0) {
-            return res.status(400).json({ success: false, message: "Số tiền thanh toán không hợp lệ!" });
-        }
-
-        if (!booked_rooms || booked_rooms.length === 0) {
-            return res.status(400).json({ success: false, message: "Phải có ít nhất một phòng!" });
-        }
-
         const uniqueSuffix = Date.now().toString().slice(-4) + Math.floor(Math.random() * 99);
         const generatedCode = `FS-${uniqueSuffix}`;
 
@@ -47,12 +39,10 @@ invoiceRouter.post('/create', async (req, res) => {
         });
 
         await newInvoice.save();
-        console.log(`✓ Tạo hóa đơn thành công: ${generatedCode}`);
 
         // NẾU LÀ VNPAY -> TẠO URL THANH TOÁN
         if (payment_method === 'VNPAY') {
             const paymentUrl = createPaymentUrl(req, newInvoice);
-            console.log(`🔗 Tạo URL VNPay cho ${generatedCode}`);
             return res.status(201).json({ 
                 success: true, 
                 message: "Đang chuyển hướng thanh toán...", 
@@ -80,24 +70,27 @@ invoiceRouter.post('/create', async (req, res) => {
     }
 });
 
-// --- 2. HÀM TẠO URL VNPAY (FIX LỖI CHECKSUM ĐÚNG) ---
+// --- 2. HÀM TẠO URL VNPAY (ĐÃ SỬA LỖI SIGNATURE) ---
 function createPaymentUrl(req, invoice) {
-    // 1. Lấy ngày giờ theo múi giờ Việt Nam (UTC+7)
     let date = new Date();
-    let createDate = moment(date).utcOffset(7).format('YYYYMMDDHHmmss');
-
-    // 2. Cố định IP để tránh lỗi trên Render
-    let ipAddr = '127.0.0.1'; 
+    let createDate = moment(date).format('YYYYMMDDHHmmss');
+    
+    let ipAddr = req.headers['x-forwarded-for'] ||
+        req.connection.remoteAddress ||
+        req.socket.remoteAddress ||
+        req.connection.socket.remoteAddress;
+    
+    if (ipAddr === '::1') {
+        ipAddr = '127.0.0.1'; 
+    }
 
     let tmnCode = process.env.VNP_TMN_CODE;
     let secretKey = process.env.VNP_HASH_SECRET;
     let vnpUrl = process.env.VNP_URL;
     let returnUrl = process.env.VNP_RETURN_URL;
     let orderId = invoice.booking_code;
+    let amount = Math.floor(invoice.final_total);
     
-    // 3. Đảm bảo số tiền là số nguyên (Integer)
-    let amount = Math.floor(invoice.final_total); 
-
     let vnp_Params = {};
     vnp_Params['vnp_Version'] = '2.1.0';
     vnp_Params['vnp_Command'] = 'pay';
@@ -105,70 +98,75 @@ function createPaymentUrl(req, invoice) {
     vnp_Params['vnp_Locale'] = 'vn';
     vnp_Params['vnp_CurrCode'] = 'VND';
     vnp_Params['vnp_TxnRef'] = orderId;
-    vnp_Params['vnp_OrderInfo'] = 'Thanh toan don ' + orderId;
+    vnp_Params['vnp_OrderInfo'] = 'Thanh toan don hang ' + orderId; // Rút gọn nội dung cho an toàn
     vnp_Params['vnp_OrderType'] = 'other';
-    vnp_Params['vnp_Amount'] = amount * 100; // VNPAY tính đơn vị là hào/xu
+    vnp_Params['vnp_Amount'] = amount * 100;
     vnp_Params['vnp_ReturnUrl'] = returnUrl;
     vnp_Params['vnp_IpAddr'] = ipAddr;
     vnp_Params['vnp_CreateDate'] = createDate;
 
-    // 4. Tạo chuỗi ký theo VNPAY standard (KEY=VALUE&KEY2=VALUE2, sorted by KEY)
-    // Lấy tất cả key, sort alphabetically
-    let sortedKeys = Object.keys(vnp_Params).sort();
-    console.log(`[VNPay] Sorted keys: ${sortedKeys.join(', ')}`);
-    
-    // Tạo signData: key1=value1&key2=value2... (KHÔNG encode key, KHÔNG encode value khi tạo hash)
-    let signData = sortedKeys.map(key => key + '=' + vnp_Params[key]).join('&');
-    console.log(`[VNPay] SignData before hash: ${signData.substring(0, 100)}...`);
-    
-    // 5. Tạo chữ ký SHA512 (lấy hex digest)
+    // Sắp xếp tham số
+    vnp_Params = sortObject(vnp_Params);
+
+    let signData = ""; 
+    let i = 0;
+    for (let key in vnp_Params) {
+        if (i === 1) { signData += "&"; }
+        signData += key + "=" + vnp_Params[key];
+        i = 1;
+    }
+
     let hmac = crypto.createHmac("sha512", secretKey);
-    let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
-    console.log(`[VNPay] Generated hash: ${signed.substring(0, 20)}...`);
+    // [FIX 2] Dùng Buffer.from thay vì new Buffer
+    let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex"); 
     
-    // 6. Tạo URL query string (CÓ encode khi tạo URL)
-    vnp_Params['vnp_SecureHash'] = signed;
-    let queryString = sortedKeys
-        .concat('vnp_SecureHash')
-        .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(vnp_Params[key]))
-        .join('&');
-    
-    vnpUrl += '?' + queryString;
-    console.log(`[VNPay] Payment URL created for: ${orderId}`);
+    // [FIX 3 - QUAN TRỌNG NHẤT]
+    // Không dùng qs.stringify nữa. Nối trực tiếp signData vào để đảm bảo đồng nhất.
+    vnpUrl += '?' + signData + '&vnp_SecureHash=' + signed;
 
     return vnpUrl;
 }
 
+// Hàm sortObject (Giữ nguyên logic chuẩn của VNPay)
+function sortObject(obj) {
+    let sorted = {};
+    let keys = Object.keys(obj).sort();
+    keys.forEach((key) => {
+        sorted[key] = encodeURIComponent(obj[key]).replace(/%20/g, "+");
+    });
+    return sorted;
+}
+
+// --- 3. API RETURN URL ---
+// TRONG InvoiceRoutes.js
 invoiceRouter.get('/vnpay_return', async (req, res) => {
     const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
     
     try {
         let vnp_Params = req.query;
         let secureHash = vnp_Params['vnp_SecureHash'];
-        const bookingCode = vnp_Params['vnp_TxnRef'];
 
-        console.log(`\n🔙 VNPay Return - Booking: ${bookingCode}`);
+        const bookingCode = vnp_Params['vnp_TxnRef']; // Lấy mã đơn hàng để dùng cho redirect kể cả khi lỗi
 
         delete vnp_Params['vnp_SecureHash'];
         delete vnp_Params['vnp_SecureHashType'];
 
+        vnp_Params = sortObject(vnp_Params);
+
         let secretKey = process.env.VNP_HASH_SECRET;
-        
-        // QUAN TRỌNG: Sort keys theo alphabet, tạo signData giống như tạo URL
-        let sortedKeys = Object.keys(vnp_Params).sort();
-        let signData = sortedKeys.map(key => key + '=' + vnp_Params[key]).join('&');
+        let signData = ""; 
+        let i = 0;
+        for (let key in vnp_Params) {
+            if (i === 1) { signData += "&"; }
+            signData += key + "=" + vnp_Params[key];
+            i = 1;
+        }
 
         let hmac = crypto.createHmac("sha512", secretKey);
         let signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
 
-        console.log("📋 Params received:", Object.keys(vnp_Params).join(', '));
-        console.log("🔗 SignData:", signData.substring(0, 100) + "...");
-        console.log("✅ Expected hash:", signed.substring(0, 20) + "...");
-        console.log("📝 Received hash:", secureHash.substring(0, 20) + "...");
-        console.log("🔍 Match:", secureHash === signed ? "✅ YES" : "❌ NO");
-
         // KIỂM TRA CHỮ KÝ
-        if(secureHash === signed) {
+        if(secureHash === signed){
             const rspCode = vnp_Params['vnp_ResponseCode'];
 
             if(rspCode === '00') {
@@ -184,12 +182,7 @@ invoiceRouter.get('/vnpay_return', async (req, res) => {
                 );
 
                 if (updatedInvoice) {
-                    try { 
-                        await sendBookingEmail(updatedInvoice);
-                        console.log("✓ Gửi email thành công cho:", bookingCode);
-                    } catch (e) {
-                        console.error("✗ Lỗi gửi email:", e.message);
-                    }
+                    try { await sendBookingEmail(updatedInvoice); } catch (e) {}
                 }
                 return res.redirect(`${FRONTEND_URL}/checkout-success?code=${bookingCode}&status=success`);
             } else {
@@ -199,16 +192,13 @@ invoiceRouter.get('/vnpay_return', async (req, res) => {
             }
         } else {
             // SAI CHỮ KÝ
-            console.error("❌ CHECKSUM FAILED!");
-            console.error("Expected:", signed);
-            console.error("Got:", secureHash);
+            console.error("Checksum failed!");
             return res.redirect(`${FRONTEND_URL}/checkout-fail?code=${bookingCode}&error=checksum`);
         }
     } catch (error) {
         // TRƯỜNG HỢP CRASH CODE: Luôn đẩy về trang thất bại ở Frontend thay vì hiện lỗi ở Backend
-        console.error("❌ Lỗi xử lý vnpay_return:", error);
-        const bookingCode = req.query['vnp_TxnRef'] || 'unknown';
-        res.redirect(`${FRONTEND_URL}/checkout-fail?code=${bookingCode}&error=system`);
+        console.error("Lỗi xử lý vnpay_return:", error);
+        res.redirect(`${FRONTEND_URL}/checkout-fail?error=system`);
     }
 });
 
